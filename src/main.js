@@ -5,9 +5,17 @@ import App from './App'
 import router from './router'
 import store from './store'
 import webConfig from '../static/webconfig.js'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
-Vue.config.productionTip = false
-Vue.use(webConfig)
+ 
+Vue.use(Vuetify)
+
+Vue.config.productionTip = false;
+Vue.use(webConfig);
+Vue.use(ElementUI);
 
 /* eslint-disable no-new */
 new Vue({

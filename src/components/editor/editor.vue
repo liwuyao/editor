@@ -16,6 +16,9 @@
 				    position:'relative',
 				    overflow:'hidden'
 				  },
+				attrs: {
+				    id: 'editorBox'
+				  },
 				},
 				this.childMsg.map(function(component) {
                     return createElement('click',{

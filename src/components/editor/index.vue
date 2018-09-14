@@ -7,38 +7,49 @@
 <!--  	选择组件-->
   	<div class="editor-page-content">
   		<div class="frame demo">
-	  		<div class="demo-left">
-	  			<div v-for="item in demoBtn" :class="{demoActive: demoBtnActive == item }" @click="demoBtnActive = item">{{item}}</div>
-	  		</div>
 	  		<div class="demo-right">
-	  			<!--<demobox :demoMsg="demoMsg"></demobox>-->
-	  			<!--常用组件-->
-	  			<div v-for="item of demoMsg">
-	  				<div style="padding: 10px;border-top:1px solid gainsboro;">{{item.name}}</div>
-	  				<div class="demo-component-box" :style="demoComponentBoxStyle(item.demos)">
-	  					<div style="display: inline-block;width: 364px;overflow: hidden;">
-	  						<div class="demo-component-drag" draggable = 'true' v-for="demos of item.demos" v-on:dragstart="demoDrag($event,demos)">
-	  								<div style="width:100%;height:54px;display: flex;flex-direction: column;justify-content: space-between;margin-top: 17px;">
-	  									<i :class="demos.icon"></i>
-	  								  <p>{{demos.name}}</p>
-	  								</div>
-	  					  </div>
-	  					</div>
-	  				</div>
-	  			</div>
+	  			<el-tabs type="border-card" stretch style="border: none;box-shadow: none;">
+					  <el-tab-pane label="模块" style="padding: 0;">
+					  	<el-collapse v-model="activeNames" @change="handleChange">
+							  <el-collapse-item v-for="(item, index) in demoMsg" :title="item.name" :name="index" style="padding: 0;" :key="index">
+				  				<div class="demo-component-box" :style="demoComponentBoxStyle(item.demos)">
+				  					<div style="display: inline-block;width: 364px;overflow: hidden;">
+				  						<div class="demo-component-drag" draggable = 'true' v-for="demos of item.demos" v-on:dragstart="demoDrag($event,demos)">
+				  								<div style="width:100%;height:54px;display: flex;flex-direction: column;justify-content: space-between;margin-top: 17px;">
+				  									<i :class="demos.icon" style="line-height: 30px;"></i>
+				  								  <p>{{demos.name}}</p>
+				  								</div>
+				  					  </div>
+				  					</div>
+				  				</div>
+							  </el-collapse-item>
+							</el-collapse>
+					  </el-tab-pane>
+					  <el-tab-pane label="页面">
+					  	<p style="padding: 10px 0;text-align: center;">正在开发中</p>
+					  </el-tab-pane>
+					</el-tabs>
 	  		</div>
 	  	</div>
 <!--	  	编辑器-->
 	  	<div class="frame editor">
 	  			<div style="width: 375px;margin: 0 auto;">
 		  				<header class="editor-header">首页</header>
-			  		  <div style="display: inline-block;"  @drop="editorDragOver($event)" @dragover="allowDrop($event)">
+			  		  <div style="display: inline-block;"  @drop="editorDragOver($event)" @dragover="allowDrop($event)"
+			  		  	@click="editorClick($event)">
 			  		  	<editor :childMsg=childMsg></editor>
 			  		  </div>
 	  			</div>
 	  	</div>
-	  	<div class="frame">
-	  		<editorfrom></editorfrom>
+	  	<div class="frame editor-from">
+	  		<div class="editor-handle">
+	  			<div style="width: 100%;text-align: center;position: absolute;top: 50%;transform: translateY(-50%);">
+	  				<span>撤销</span>
+	  			</div>
+	  		</div>
+	  		<div style="flex: 1;padding: 10px;">
+	  			<editorfrom></editorfrom>
+	  		</div>
 	  	</div>
   	</div>
 <!--  	<order-btn :status="status"></order-btn>-->
@@ -70,8 +81,8 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
+      activeNames:0,
       childMsg:[],
-      demoBtn:['文字','按钮','图片'],
       demoBtnActive: '',
       demoDragMsg:{
       	left:'',
@@ -85,25 +96,39 @@ export default {
       			{
 		      		icon:'iconfont icon-demo-anniu',
 		      		name:'按钮',
+		      		type:'btn',
 		      		elm:'vbutton'
 		      	},
 		      	{
-		      		icon:'iconfont icon-demo-anniu',
+		      		icon:'iconfont icon-wenben',
 		      		name:'文本',
+		      		type:'text',
+		      		elm:'vtextarea'
+		      	},
+		      	{
+		      		icon:'iconfont icon-demo-anniu',
+		      		name:'按钮',
+		      		type:'btn',
 		      		elm:'vbutton'
 		      	},
 		      	{
-		      		icon:'iconfont icon-demo-anniu',
-		      		name:'按钮'
+		      		icon:'iconfont icon-wenben',
+		      		name:'文本',
+		      		type:'text',
+		      		elm:'vtextarea'
 		      	},
 		      	{
 		      		icon:'iconfont icon-demo-anniu',
-		      		name:'按钮'
+		      		name:'按钮',
+		      		type:'btn',
+		      		elm:'vbutton'
 		      	},
 		      	{
-		      		icon:'iconfont icon-demo-anniu',
-		      		name:'按钮'
-		      	}
+		      		icon:'iconfont icon-wenben',
+		      		name:'文本',
+		      		type:'text',
+		      		elm:'vtextarea'
+		      	},
       		]
       	}
       ],
@@ -113,12 +138,27 @@ export default {
     // 计算属性的 getter
   },
   methods:{
+  	test(e){
+  		console.log(e.target)
+  	},
+//	手风琴函数
+  	handleChange(val) {
+        console.log(val);
+    },
+//  监听全局点击事件
+	editorClick(e){
+		var id = e.target.id;
+		if(id == 'editorBox'){
+			this.$store.commit('changeHideScaleBox',false);
+		}
+	},
 //	编辑盒子鼠标下落事件
   	demoDrag(ev,data){
   		this.demoDragMsg.left = ev.offsetX;
   		this.demoDragMsg.top = ev.offsetY;
   		this.$store.commit('changeDragType','creatElm');
   		this.startChooseElm = data;
+  		this.$store.commit('changeDragStatu',true);
   	},
   	allowDrop(ev){
 			ev.preventDefault();
@@ -128,14 +168,15 @@ export default {
   				//		光标位置记录位置
   		var cursorX = event.offsetX;
 			var cursorY = event.offsetY;
-  		if(type == 'creatElm'){
+			var dragStatu = this.$store.state.dragStatu
+  		if(type == 'creatElm' && dragStatu){
 					var elmX = cursorX - this.demoDragMsg.left;
 					var elmY = cursorY - this.demoDragMsg.top;
 					var index = this.childMsg.length;
 					var elmName = this.startChooseElm.elm;
 //					元素数据基础类型
 					var data = new Object;
-						 var getMSg = this.$store.state.elements.elmMsg[elmName].creatMsg;
+						 var getMSg = this.$store.state[this.startChooseElm.type].elmMsg[elmName].creatMsg;
 //							赋值函数
 						 this.getMyWeb.objectSetVal(data,getMSg)
 							data.index = index;
@@ -146,20 +187,20 @@ export default {
 					    this.childMsg.push(data);
 //					    创建编辑input
 							this.$store.commit('editorFromMsg',data);
-  		}else if(type == 'dragElm'){
+  		}else if(type == 'dragElm' && dragStatu){
   			var oldPage = this.$store.state.dragPageMsg
   			var ElmMsg = this.$store.state.editorFrom.msg;
   			var	oldElmMsgIndex = this.childMsg.indexOf(this.$store.state.editorFrom.msg);
-  			var oldLeft = transStyle(ElmMsg.props.msg.styles.left);
-  			var oldTop = transStyle(ElmMsg.props.msg.styles.top);
+  			var oldLeft = this.getMyWeb.transStyle(ElmMsg.props.msg.styles.left);
+  			var oldTop = this.getMyWeb.transStyle(ElmMsg.props.msg.styles.top);
   			var changeX = event.pageX - oldPage.pageX;
   		  var changeY = event.pageY - oldPage.pageY;
 //		   拖拽限制
-			var limiX = oldLeft + changeX + transStyle(ElmMsg.props.msg.styles.width);
+			var limiX = oldLeft + changeX + this.getMyWeb.transStyle(ElmMsg.props.msg.styles.width);
 			var resultX;
 			var resultY;
 				if(limiX>375){
-					resultX = 375 - transStyle(ElmMsg.props.msg.styles.width)
+					resultX = 375 - this.getMyWeb.transStyle(ElmMsg.props.msg.styles.width)
 				}else if(oldLeft + changeX < 0){
 					resultX = 0
 				}else{
@@ -176,13 +217,29 @@ export default {
   		  		ElmMsg.props.msg.styles.left = currentLeft;
   		  		ElmMsg.props.msg.styles.top = currentTop;
   		  		this.childMsg[oldElmMsgIndex] = ElmMsg;
-  			function transStyle(num){
-  				var index = num.indexOf('px');
-  				var result = Number(num.slice(0,index));
-  				return result;
-  			}
+//			function transStyle(num){
+//				var index = num.indexOf('px');
+//				var result = Number(num.slice(0,index));
+//				return result;
+//			}
   		}
   	},
+//	监听编辑器鼠标移动
+		editorMove(e){
+//			组件放缩
+			var scaleStatu = this.$store.state.scale.statu;
+			if(scaleStatu){
+				console.log(e.pageX)
+			}
+		},
+//		监听编辑器鼠标down
+		editorDown(e){
+			var name = e.target.className;
+		},
+//		监听编辑器鼠标up
+		editorUp(e){
+			this.$store.commit('changeScale',{statu:false})
+		},
   	demoComponentBoxStyle(item){
   		var len = Math.ceil(item.length/4);
   		var height = len*90 + 'px';
@@ -289,7 +346,7 @@ export default {
 	}
 	.demo .demo-right{
 		background: white;
-		padding: 20px 0;
+		height: 100%;
 		width: 360px;
 	}
 	.demo-component-box{
@@ -312,5 +369,14 @@ export default {
 	}
 	.demo-component-drag .iconfont{
 		font-size: 30px;
+	}
+/*	编辑器表单*/
+	.editor-from{
+		display: flex;
+	}
+	.editor-from .editor-handle{
+		width: 60px;
+		height: 100%;
+		position: relative;
 	}
 </style>

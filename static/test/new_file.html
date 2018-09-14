@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<style type="text/css">
+div#divBase{text-align:center;width:283px;}
+div#divTitle{clear:both;text-align:center;padding:3px;}
+div#divInput{float:left;}
+div#divOutput{float:right;}
+div#divButton{float:none;vertical-align:middle;margin:57px;}
+div#divCopyright{clear:both;text-align:center;padding:3px;}
+textarea#textareaInput{resize:none;overflow:auto;width:106px;height:126px;}
+textarea#textareaOutput{resize:none;overflow:auto;width:106px;height:126px;}</style></head>
+<body><div id="divBase">
+<div id="divTitle">字体检测</div>
+<div id="divInput"><textarea id="textareaInput"wrap="soft">FZDaHei-B02S,方正大黑简体
+HYGothic-Extra
+Lucida Sans</textarea></div>
+<div id="divOutput"><textarea id="textareaOutput"wrap="soft"readonly=“true”></textarea></div>
+<div id="divButton"><input type="button"value="检测"onClick="CheckFont()"/></div>
+<div id="divCopyright">Copyright © 心のsky Group</div></div>
+<script type="text/javascript"src="CheckFont.js"></script>
+<script type="text/javascript">function CheckFont()
+{var t=document.getElementById("textareaInput").value;t=IsFontExistBatch(t);document.getElementById("textareaOutput").value=t;}</script>
+</body></html>

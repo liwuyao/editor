@@ -1,0 +1,33 @@
+/*.editor-input .el-color-picker__trigger{
+	width: 150px !important;
+	height: 27px !important;
+}*/
+.editor-input-component{
+	width: 300px;
+	/*font-weight: bold;
+	font-style: normal;*/
+}
+.editor-page-content  .el-tabs__content{
+	padding: 0 !important;
+}
+.editor-page-content .el-collapse-item__content{
+	padding: 0 !important;
+}
+.editor-page-content .el-collapse-item__header{
+	padding-left: 10px !important;
+}
+.editor-from-input-header{
+	background: #CAE1F2;
+	padding: 2px 0;
+	line-height: 23px;
+	overflow: hidden;
+	color: #409eff;
+	font-weight: bolder;
+}
+.editor-from-input-content{
+	background: white;
+	padding: 10px;
+}
+.editor-click button{
+	cursor: move !important; 
+}

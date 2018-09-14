@@ -1,9 +1,12 @@
 
 <script>
 //	import button1 from './button'
-	import inputcolor from './editor-input/input-color'
-	import inputbackground from './editor-input/input-background'
-	import inputtext from './editor-input/input-text'
+	import inputcolor from './editor-input/input-color';
+	import inputbackground from './editor-input/input-background';
+	import inputname from './editor-input/input-name';
+	import inputfont from './editor-input/input-font';
+	import inputtext from './editor-input/input-text';
+	import inputsize from './editor-input/input-size';
 	export default {
 	  props: ['childMsg'],
 	  data(){
@@ -14,7 +17,7 @@
 	  	}
 	  },
 	  components:{
-	  	inputcolor,inputbackground,inputtext
+	  	inputcolor,inputbackground,inputname,inputfont,inputtext,inputsize
 	  },
 	  watch:{
 	  	'$store.state.editorFrom.msg':function(){

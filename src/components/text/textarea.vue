@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button :style="style" class="default-btn">{{name}}</button>
+    <div class="default-textarea" :style="style">
+    	{{mainText}}
+    </div>
   </div>
 </template>
 
@@ -17,10 +19,13 @@ export default {
 				}
 			return style;
 		},
-		name:function(){
-			return this.content.name
+		mainText:function(){
+			return this.content.mainText
 		}
 	},
+  created:function(){
+  	console.log(this.styles)
+  },
   data(){
   	return{
   	}
@@ -29,13 +34,7 @@ export default {
 </script>
 
 <style>
-.card {
-  padding: 10px;
-}
-.default-btn{
-	border: 1px solid blue;
-	display: inline-block;
-	border-radius: 3px;
-	background: whitesmoke;
+.default-textarea{
+	border: 1px solid gainsboro;
 }
 </style>
