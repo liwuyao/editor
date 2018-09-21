@@ -1,12 +1,14 @@
 export default{
   state: {
   	elmMsg: {
-  		vtextarea:{
-  			htmlHead: "<vtextarea :styles='",
-  			htmlFoot: "'></vtextarea>",
+  		srtextarea:{
+  			htmlHead: "<srtextarea :textConfig='",
+  			htmlFoot: "'></srtextarea>",
   			creatMsg:{
-				      	name:'vtextarea',//按钮信息
+				      	name:'srtextarea',//按钮信息
 				      	index: '',
+				      	type:'text',
+				      	isScale:true,
 				      	props:{
 				      		msg:{
 				      			styles:{

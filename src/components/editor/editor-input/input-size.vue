@@ -68,7 +68,16 @@
 				this.$store.commit('setEditorFrom',data)
 			},
 			changeHeight(){
-				
+				var data = {
+					count: +new Date,
+					index: this.msg.index,
+					msg:{
+						styles:{
+							height:this.height + 'px'
+						}
+					}
+				}
+				this.$store.commit('setEditorFrom',data)
 			}
 		}
 	}

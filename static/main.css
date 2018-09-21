@@ -31,3 +31,15 @@
 .editor-click button{
 	cursor: move !important; 
 }
+/*轮播图高度*/
+.v-carousel{
+	height: 100% !important;
+}
+.gallery-dailog .el-tabs--border-card{
+	border-bottom: none !important;
+	box-shadow: none !important;
+}
+
+.gallery-dailog .el-tabs--border-card>.el-tabs__header{
+	background: none !important;
+}

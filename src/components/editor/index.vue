@@ -44,7 +44,8 @@
 	  	<div class="frame editor-from">
 	  		<div class="editor-handle">
 	  			<div style="width: 100%;text-align: center;position: absolute;top: 50%;transform: translateY(-50%);">
-	  				<span>撤销</span>
+	  				<div @click="save()">保存</div>
+	  				<div>撤销</div>
 	  			</div>
 	  		</div>
 	  		<div style="flex: 1;padding: 10px;">
@@ -97,25 +98,25 @@ export default {
 		      		icon:'iconfont icon-demo-anniu',
 		      		name:'按钮',
 		      		type:'btn',
-		      		elm:'vbutton'
+		      		elm:'srbutton'
 		      	},
 		      	{
 		      		icon:'iconfont icon-wenben',
 		      		name:'文本',
 		      		type:'text',
-		      		elm:'vtextarea'
+		      		elm:'srtextarea'
 		      	},
 		      	{
 		      		icon:'iconfont icon-demo-anniu',
-		      		name:'按钮',
-		      		type:'btn',
-		      		elm:'vbutton'
+		      		name:'图片',
+		      		type:'img',
+		      		elm:'srimage'
 		      	},
 		      	{
 		      		icon:'iconfont icon-wenben',
-		      		name:'文本',
-		      		type:'text',
-		      		elm:'vtextarea'
+		      		name:'轮播',
+		      		type:'img',
+		      		elm:'srswiper'
 		      	},
 		      	{
 		      		icon:'iconfont icon-demo-anniu',
@@ -247,28 +248,30 @@ export default {
   	},
 //	保存信息，并翻译信息
   	save(){
-  		var elements = this.$store.state.elements.elmMsg;
   		var data = {
   			html:'',
   			data:{},
   		}
   		var htmls = '';
   		var datas = {};
+  		console.log(this.childMsg);
   		for(var item of this.childMsg){
   			var index = this.childMsg.indexOf(item);
-  			var name = item.name + index;
-  			for(var i in elements){
-  				var spliceHtml = ''
-  				if(item.name == i){
-  					spliceHtml = elements[i].htmlHead + name + elements[i].htmlFoot; 
-  				}
-  				htmls += spliceHtml;
-  				datas[name] = item.props.msg.styles
-  			}
+			var name = item.name + index;
+			var elements = this.$store.state[item.type].elmMsg;
+			for(var i in elements){
+				var spliceHtml = ''
+				if(item.name == i){
+					spliceHtml = elements[i].htmlHead + name + elements[i].htmlFoot; 
+				}
+				htmls += spliceHtml;
+				datas[name] = item.props.msg.styles
+			}
+				
   		}
   		data.html = htmls;
   		data.data = datas;
-  		console.log(data);
+  		console.log(JSON.stringify(data));
   	}
   }
 }

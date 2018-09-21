@@ -13,7 +13,7 @@
 			    <i class="iconfont icon-bold set-text-size" :class="{fontStyle: isBolder}" @click="bolder()"></i>
 			    <i class="iconfont icon-qingxie set-text-size" :class="{fontStyle: isItalic}" @click="italic()"></i>
 		    </div>
-			<div class="editor-input-text-box" style="margin-top: 10px;" v-if="msg.name == 'vtextarea'">
+			<div class="editor-input-text-box" style="margin-top: 10px;" v-if="msg.name == 'srtextarea'">
 				<span style="margin-right: 5px;">对齐</span>
 				<el-radio-group v-model="textAline" size="mini" @change="changeAline">
 			      <el-radio-button label="left">
@@ -27,7 +27,7 @@
 			      </el-radio-button>
 				</el-radio-group>
 			</div>
-			<div class="editor-input-text-box" style="margin-top: 10px;" v-if="msg.name == 'vtextarea'">
+			<div class="editor-input-text-box" style="margin-top: 10px;" v-if="msg.name == 'srtextarea'">
 				<span style="margin-right: 5px;" @click="test()">字体</span>
 				<el-select v-model="fontFamily" placeholder="请选择" size="mini" @change="changeFamily">
 				    <el-option
@@ -114,7 +114,6 @@
 			}
 		},
 		created: function(){
-			console.log(this.msg)
 			this.size = this.getMyWeb.transStyle(this.msg.props.msg.styles['font-size']);
 			this.textAline = this.msg.props.msg.styles['text-align'];
 			this.fontFamily = this.msg.props.msg.styles['font-family'];

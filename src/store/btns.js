@@ -1,12 +1,14 @@
 export default{
   state: {
   	elmMsg: {
-  		vbutton:{
-  			htmlHead: "<vbutton :styles='",
-  			htmlFoot: "'></vbutton>",
+  		srbutton:{
+  			htmlHead: "<srbutton :btnConfig='",
+  			htmlFoot: "'></srbutton>",
   			creatMsg:{
-				      	name:'vbutton',//按钮信息
+				      	name:'srbutton',//按钮信息
 				      	index: '',
+				      	type:'btn',
+				      	isScale:true,
 				      	props:{
 				      		msg:{
 				      			styles:{

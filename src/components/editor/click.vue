@@ -1,7 +1,9 @@
 
 <script>
-	import vbutton from '../button/button'
-	import vtextarea from '../text/textarea'
+	import srbutton from '../button/button'
+	import srtextarea from '../text/textarea'
+	import srimage from '../image/sr-image'
+	import srswiper from '../image/sr-swiper'
 	var dragBox = {
 		template:`
 			<div class="draw-box" :draggable="drag" @mousedown="startDrag">
@@ -34,7 +36,7 @@
 	export default {
 	  props: ['msg'],
 	  components:{
-	  	vbutton,vtextarea,dragBox
+	  	srbutton,srtextarea,dragBox,srimage,srswiper
 	  },
 	  computed:{
 	  	styles:function(){
@@ -73,13 +75,15 @@
 	  render: function(createElement) { // h 为 createElement 函数，接受三个参数
 	  		var _this = this;
 	  		var getsShowBox = this.$store.state.hideScaleBox;
-	  		var showBox;
-	  		if(this.currentIndex == this.selfIndex || this.start){
-	  			if(getsShowBox){
-	  				showBox = true
-	  			}
-	  		}else{
-	  			showBox = false
+	  		var showBox = '';
+	  		if(this.msg.isScale){
+	  			if(this.currentIndex == this.selfIndex || this.start){
+		  			if(getsShowBox){
+		  				showBox = true
+		  			}
+		  		}else{
+		  			showBox = false
+		  		}
 	  		}
 	  		var dragMsg;
 	  		   if(showBox){

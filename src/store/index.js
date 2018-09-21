@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import moduleA from './module.js'
 import moduleBtn from './btns.js'
 import editorFrom from './editor-from.js'
 import elements from './elements.js'
 import moduleText from './text.js'
+import moduleImg from './img.js'
 
 Vue.use(Vuex)
 /*
@@ -21,7 +21,7 @@ export default new Vuex.Store({
     	pageX:'',
     	pageY:''
     },
-    hideScaleBox:false
+    hideScaleBox:false,
   },
   mutations: {
     changeClientKey(state,key) {
@@ -39,13 +39,13 @@ export default new Vuex.Store({
     },
     changeHideScaleBox(state,statu){
     	state.hideScaleBox = statu;
-    }
+    },
   },
   modules: {
-    a: moduleA,
     btn: moduleBtn,
     editorFrom: editorFrom,
     elements: elements,
-    text:moduleText
+    text:moduleText,
+    img:moduleImg
   }
 })

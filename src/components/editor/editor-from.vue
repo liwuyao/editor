@@ -7,6 +7,8 @@
 	import inputfont from './editor-input/input-font';
 	import inputtext from './editor-input/input-text';
 	import inputsize from './editor-input/input-size';
+	import inputimg from './editor-input/input-img';
+	import inputswiper from './editor-input/input-swiper';
 	export default {
 	  props: ['childMsg'],
 	  data(){
@@ -17,7 +19,7 @@
 	  	}
 	  },
 	  components:{
-	  	inputcolor,inputbackground,inputname,inputfont,inputtext,inputsize
+	  	inputcolor,inputbackground,inputname,inputfont,inputtext,inputsize,inputimg,inputswiper
 	  },
 	  watch:{
 	  	'$store.state.editorFrom.msg':function(){
