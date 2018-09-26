@@ -136,7 +136,6 @@
 			          						document.body.onmouseup=function(e){
 			          							document.body.onmousemove = null;
 			          							document.body.onmouseup = null;
-			          							console.log(_this.$store.state.childMsg)
 			          						}
 			                    		}
 			                    	}
@@ -185,7 +184,8 @@
 												_this.$store.commit('setEditorFrom',data)
 			          						}
 			          						document.body.onmouseup=function(e){
-			          							document.body.onmousemove = null
+			          							document.body.onmousemove = null;
+			          							document.body.onmouseup = null;
 			          						}
 			                    		}
 			                    	}
@@ -239,7 +239,8 @@
 												_this.$store.commit('setEditorFrom',data)
 			          						}
 			          						document.body.onmouseup=function(e){
-			          							document.body.onmousemove = null
+			          							document.body.onmousemove = null;
+			          							document.body.onmouseup = null;
 			          						}
 			                    		}
 			                    	}
@@ -287,7 +288,8 @@
 												_this.$store.commit('setEditorFrom',data)
 			          						}
 			          						document.body.onmouseup=function(e){
-			          							document.body.onmousemove = null
+			          							document.body.onmousemove = null;
+			          							document.body.onmouseup = null;
 			          						}
 			                    		}
 			                    	}
@@ -334,7 +336,8 @@
 												_this.$store.commit('setEditorFrom',data)
 			          						}
 			          						document.body.onmouseup=function(e){
-			          							document.body.onmousemove = null
+			          							document.body.onmousemove = null;
+			          							document.body.onmouseup = null;
 			          						}
 			                    		}
 			                    	}
@@ -386,7 +389,8 @@
 												_this.$store.commit('setEditorFrom',data)
 			          						}
 			          						document.body.onmouseup=function(e){
-			          							document.body.onmousemove = null
+			          							document.body.onmousemove = null;
+			          							document.body.onmouseup = null;
 			          						}
 			                    		}
 			                    	}
@@ -435,7 +439,8 @@
 												_this.$store.commit('setEditorFrom',data)
 			          						}
 			          						document.body.onmouseup=function(e){
-			          							document.body.onmousemove = null
+			          							document.body.onmousemove = null;
+			          							document.body.onmouseup = null;
 			          						}
 			                    		}
 			                    	}
@@ -489,7 +494,8 @@
 												_this.$store.commit('setEditorFrom',data)
 			          						}
 			          						document.body.onmouseup=function(e){
-			          							document.body.onmousemove = null
+			          							document.body.onmousemove = null;
+			          							document.body.onmouseup = null;
 			          						}
 			                    		}
 			                    	}

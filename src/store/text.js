@@ -19,11 +19,12 @@ export default{
 				      				left: '153px',
 				      				top: '',
 				      				'font-size':'14px',
-				      				'font-weight':'bolder',
+				      				'font-weight':'100',
 				      				'font-style': 'normal',
 				      				'border-color':'rgba(255, 255, 255, 0)',
 				      				'text-align':'left',
-				      				'font-family':'微软雅黑'
+				      				'font-family':'微软雅黑',
+				      				'line-height':'14px',
 				      			},
 				      			content:{
 						      				mainText: '我是文本',

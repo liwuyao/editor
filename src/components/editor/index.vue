@@ -45,7 +45,12 @@
 	  		<div class="editor-handle">
 	  			<div style="width: 100%;text-align: center;position: absolute;top: 50%;transform: translateY(-50%);">
 	  				<div @click="save()">保存</div>
-	  				<div>撤销</div>
+	  				<div @click="editorBack()" style="margin-top: 10px;">
+	  					<i class="iconfont icon-daohangchexiao"></i>
+	  				</div>
+	  				<div @click="editorRecovery()" style="margin-top: 10px;">
+	  					<i class="iconfont icon-qianjin-kong" style="font-size: 18px;"></i>
+	  				</div>
 	  			</div>
 	  		</div>
 	  		<div style="flex: 1;padding: 10px;">
@@ -67,10 +72,20 @@ export default {
   	editor,editorfrom,demobox
   },
   watch:{
-	  	'$store.state.editorFrom.set.count':function(){;
+	  	'$store.state.editorFrom.set.count':function(){
+//	  		this.recordSteep = 0;
 	  		var getMsg = this.$store.state.editorFrom.set.msg;
 	  		var index = this.$store.state.editorFrom.set.index;
 				this.getMyWeb.objectSetVal(this.childMsg[index].props.msg,getMsg);
+				if(getMsg.styles){
+					for(var i in getMsg.styles){
+						if(i !== 'left' && i !== 'width' && i !== 'top' && i !=='height'){
+							this.$store.commit('saveRecord',this.childMsg);
+						}
+					}
+				}else{
+					this.$store.commit('saveRecord',this.childMsg);
+				}
 	  	}
 	},
 		/*
@@ -107,13 +122,13 @@ export default {
 		      		elm:'srtextarea'
 		      	},
 		      	{
-		      		icon:'iconfont icon-demo-anniu',
+		      		icon:'iconfont icon-tupian',
 		      		name:'图片',
 		      		type:'img',
 		      		elm:'srimage'
 		      	},
 		      	{
-		      		icon:'iconfont icon-wenben',
+		      		icon:'iconfont icon-xiangce',
 		      		name:'轮播',
 		      		type:'img',
 		      		elm:'srswiper'
@@ -133,11 +148,11 @@ export default {
       		]
       	}
       ],
-      record:[],
+      recordSteep:0,
+      recoverySteep:0,
     }
   },
   created:function(){
-  	this.childMsg = this.$store.state.childMsg
   },
   computed: {
     // 计算属性的 getter
@@ -189,7 +204,7 @@ export default {
 					    this.childMsg.push(data);
 //					    记录操作
 					    this.$store.commit('saveRecord',this.childMsg);
-					    console.log(this.$store.state.record)
+//					    this.recordSteep = 0;
 //					    创建编辑input
 							this.$store.commit('editorFromMsg',data);
   		}else if(type == 'dragElm' && dragStatu){//创建后的位移
@@ -224,6 +239,8 @@ export default {
   		  		this.childMsg[oldElmMsgIndex] = ElmMsg;
 //					记录操作
 				this.$store.commit('saveRecord',this.childMsg);
+//				console.log(this.$store.state.record)
+				this.recordSteep = 0;
   		}
   	},
 //	监听编辑器鼠标移动
@@ -250,10 +267,40 @@ export default {
 //	saveRecord(){
 //		this.getMyWeb.recordArr(this.record,this.childMsg);
 //	},
-//  后退
-		backEditor(){
-			
+//  撤销
+		editorBack(){
+			this.recordSteep +=1;
+			var len = this.$store.state.record.length -1;
+//			if(this.recordSteep == 1){
+//				this.$store.commit('saveRecovery',false);
+//			}
+			if(len-this.recordSteep >= 0){
+				this.childMsg = this.$store.state.record[this.recordSteep];
+//				this.$store.commit('saveRecovery',this.childMsg);
+        this.$store.commit('saveRecord',this.childMsg);
+        this.recordSteep += 1
+			}else{
+				this.childMsg=[];
+			}
+//			console.log('back')
+//			this.recoverySteep = 0;
 		},	
+//		恢复
+    editorRecovery(){
+			this.recordSteep -=1;
+			if(this.recordSteep <0){
+				this.recordSteep = 0;
+			}
+			var len = this.$store.state.record.length -1;
+			if(this.recordSteep == 1){
+				this.$store.commit('saveRecovery',false);
+			}
+			if(len -this.recordSteep >= 0){
+				this.childMsg = this.$store.state.record[this.recordSteep];
+			}else{
+				this.childMsg=[];
+			}
+    },
 //	保存信息，并翻译信息
   	save(){
   		var data = {
@@ -264,7 +311,7 @@ export default {
   		var datas = {};
   		console.log(this.childMsg);
   		for(var item of this.childMsg){
-  			var index = this.childMsg.indexOf(item);
+  		var index = this.childMsg.indexOf(item);
 			var name = item.name + index;
 			var elements = this.$store.state[item.type].elmMsg;
 			for(var i in elements){
@@ -273,13 +320,13 @@ export default {
 					spliceHtml = elements[i].htmlHead + name + elements[i].htmlFoot; 
 				}
 				htmls += spliceHtml;
-				datas[name] = item.props.msg.styles
+				datas[name] = item.props.msg
 			}
 				
   		}
   		data.html = htmls;
   		data.data = datas;
-  		console.log(JSON.stringify(data));
+  		console.log(data);
   	}
   }
 }

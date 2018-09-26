@@ -17,7 +17,7 @@ export default{
 				      				left: '153px',
 				      				top: '',
 				      			},
-				      			src:'http://pic.pptbz.com/201506/2015070581208537.JPG'
+				      			src:'http://s16.sinaimg.cn/mw690/003gRgrCzy73OGZAV434f&690'
 				      		},
 				      	},
 				      	input:[

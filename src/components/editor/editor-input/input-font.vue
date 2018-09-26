@@ -9,7 +9,7 @@
 		<div class="editor-from-input-content">
 		    <div class="editor-input-text-box">
 		    	<span style="margin-right: 5px;">大小</span>
-		    	<el-input-number v-model="size" @change="handleChange" size="mini" style="width: 90px;" :min="12" :max="30"></el-input-number>
+		    	<el-input-number v-model="size" @change="szie" size="mini" style="width: 90px;" :min="12" :max="30"></el-input-number>
 			    <i class="iconfont icon-bold set-text-size" :class="{fontStyle: isBolder}" @click="bolder()"></i>
 			    <i class="iconfont icon-qingxie set-text-size" :class="{fontStyle: isItalic}" @click="italic()"></i>
 		    </div>
@@ -38,6 +38,10 @@
 				    </el-option>
 				</el-select>
 			</div>
+			<div class="editor-input-text-box" style="margin-top: 10px;">
+		    	<span style="margin-right: 5px;">行高</span>
+		    	<el-input-number v-model="lineH" @change="lineHeight" size="mini" style="width: 90px;" :min="12" :max="30"></el-input-number>
+		    </div>
 		</div>
 	</div>
 </template>
@@ -48,6 +52,7 @@
 		watch:{
 			'msg.index':function(){				
 				this.size = this.getMyWeb.transStyle(this.msg.props.msg.styles['font-size']);
+				this.lineH = this.getMyWeb.transStyle(this.msg.props.msg.styles['line-height']);
 				this.textAline = this.msg.props.msg.styles['text-align'];
 				this.fontFamily = this.msg.props.msg.styles['font-family'];
 				if(this.msg.props.msg.styles['font-weight'] == 'bolder'){
@@ -65,6 +70,7 @@
 		data(){
 			return{
 				size:14,
+				lineH:14,
 				isBolder:false,
 				isItalic:false,
 				fontFamily:'',
@@ -115,6 +121,7 @@
 		},
 		created: function(){
 			this.size = this.getMyWeb.transStyle(this.msg.props.msg.styles['font-size']);
+			this.lineH = this.getMyWeb.transStyle(this.msg.props.msg.styles['line-height']);
 			this.textAline = this.msg.props.msg.styles['text-align'];
 			this.fontFamily = this.msg.props.msg.styles['font-family'];
 			if(this.msg.props.msg.styles['font-weight'] == 'bolder'){
@@ -132,7 +139,7 @@
 			test(){
 				console.log(this.getMyWeb.getSystemFont('宋体'))
 			},
-		   handleChange() {
+		   szie() {
 		        var data = {
 					count: +new Date,
 					index: this.msg.index,
@@ -203,6 +210,18 @@
 					msg:{
 						styles:{
 							'font-family':this.fontFamily
+						}
+					}
+				}
+		        this.$store.commit('setEditorFrom',data)
+		  },
+		  lineHeight(){
+		  	var data = {
+					count: +new Date,
+					index: this.msg.index,
+					msg:{
+						styles:{
+							'line-height':this.lineH + 'px'
 						}
 					}
 				}

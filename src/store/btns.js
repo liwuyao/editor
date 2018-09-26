@@ -19,7 +19,7 @@ export default{
 				      				left: '153px',
 				      				top: '',
 				      				'font-size':'14px',
-				      				'font-weight':'bolder',
+				      				'font-weight':'100',
 				      				'font-style': 'normal',
 				      				'border-color':'#000'
 				      			},

@@ -11,6 +11,8 @@ Vue.use(Vuex)
  * dragStatu 拖拽状态
  * dragPageMsg 拖拽信息，开始拖拽的x,y
  * hideScaleBox 隐藏放缩框
+ * record 记录操作，用以撤销
+ * recovery 记录撤销，用以恢复
  */
 export default new Vuex.Store({
   state: {
@@ -23,6 +25,7 @@ export default new Vuex.Store({
     hideScaleBox:false,
     childMsg:[],
     record:[],
+    recovery:[]
   },
   mutations: {
     changeClientKey(state,key) {
@@ -43,6 +46,14 @@ export default new Vuex.Store({
     },
     saveRecord(state,data){
     	recordArr(state.record,data);
+//  	console.log(state.record)
+    },
+    saveRecovery(state,data){
+    	if(!data){
+    		state.recovery = []
+    	}else{
+    		recordArr(state.recovery,data)
+    	}
     }
   },
   modules: {
@@ -61,10 +72,11 @@ function recordArr(arr,data){
   					objectSetVal(obj,item);
   					newArr.push(obj)
   				}
-  				arr.push(newArr);
-				if(arr.length>5){
-					arr.splice(0,1)
-				}
+  				if(arr.length == 0){
+    				arr.push(newArr);
+  				}else{
+  				    arr.splice(0,0,newArr)
+  				}
 		}
 function objectSetVal(val,old){
 			for(var i in old){
@@ -77,4 +89,8 @@ function objectSetVal(val,old){
 		 				val[i] = old[i];
 		 			}
 				}
+}
+function prepend(arr, item) {
+	console.log(item);
+    return [item].concat(arr);
 }
