@@ -12,7 +12,7 @@
 		</div>
 		<div class="editor-from-input-content">
 			<div style="display: flex;flex-wrap: wrap;padding: 0 6px;">
-				<div class="img-box" v-for="(item,index) in imgs" :key="index">
+				<div class="img-box" v-for="(item,index) in imgs" :key="index" @click="openGallery(index)">
 					 <v-img
 		              :src="item.src"
 		              height="125"
@@ -22,21 +22,32 @@
 				</div>
 			</div>
 	    </div>
+	    <gallery :isShow="isShow" v-on:imgSrc="getImg"></gallery>
 	</div>
 </template>
 
 <script>
+import gallery from './gallery';
+
 	export default {
 		props:['msg'],
+		components:{
+			gallery
+		},
 		watch:{
 			'msg.index':function(){
-				this.value = this.msg.props.msg.content.name;
+				this.imgs = this.msg.props.msg.imgUrls
+			},
+			'msg.props.msg.imgUrls':function(){
+				this.imgs = this.msg.props.msg.imgUrls
 			}
 		},
 		data(){
 			return{
 				value:'',
 				imgs:[],
+				isShow:'',
+				imgIndex:''
 			}
 		},
 		created: function(){
@@ -52,6 +63,28 @@
 						content:{
 							name:this.value
 						}
+					}
+				}
+				this.$store.commit('setEditorFrom',data)
+			},
+			openGallery(index){
+				this.isShow = +new Date();
+				this.imgIndex = index;
+			},
+			getImg(img){
+				var images = [];
+					for(var item of this.imgs){
+						var obj = {
+							src:item.src
+						}
+						images.push(obj)
+					}
+					images[this.imgIndex].src = img.src
+				var data = {
+					count: +new Date,
+					index: this.msg.index,
+					msg:{
+						imgUrls:images
 					}
 				}
 				this.$store.commit('setEditorFrom',data)

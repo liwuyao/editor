@@ -24,10 +24,10 @@
 			return style;
 		},
 	},
-	created:function(){
-		this.items = this.imgUrls;
-		console.log(this.items)
-	},
+//	created:function(){
+//		this.items = this.imgUrls;
+//		console.log(this.items)
+//	},
 	data () {
       return {
 //      items: [

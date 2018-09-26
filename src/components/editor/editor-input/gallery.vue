@@ -157,9 +157,7 @@
 //	        console.log(tab, event);
 	      },
 		  chooseImg(img){
-		  	console.log(img)
 		  	this.currentImg = img;
-		  	this.$store.commit('setGalleryImg',img.src)
 		  },
 		  confirm(){
 		  	this.$emit('imgSrc',this.currentImg)

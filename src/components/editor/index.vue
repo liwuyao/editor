@@ -78,10 +78,10 @@ export default {
   		 * demoBtnActive: 当前模板种类选择名称
   		 * demoDragMsg：开始拖拽模板记录的位置信息
   		 * startChooseElm：记录要创建组件的选择信息
+  		 * record:编辑记录
   		 */
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
       activeNames:0,
       childMsg:[],
       demoBtnActive: '',
@@ -133,15 +133,16 @@ export default {
       		]
       	}
       ],
+      record:[],
     }
+  },
+  created:function(){
+  	this.childMsg = this.$store.state.childMsg
   },
   computed: {
     // 计算属性的 getter
   },
   methods:{
-  	test(e){
-  		console.log(e.target)
-  	},
 //	手风琴函数
   	handleChange(val) {
         console.log(val);
@@ -170,7 +171,7 @@ export default {
   		var cursorX = event.offsetX;
 			var cursorY = event.offsetY;
 			var dragStatu = this.$store.state.dragStatu
-  		if(type == 'creatElm' && dragStatu){
+  		if(type == 'creatElm' && dragStatu){//开始创建
 					var elmX = cursorX - this.demoDragMsg.left;
 					var elmY = cursorY - this.demoDragMsg.top;
 					var index = this.childMsg.length;
@@ -186,9 +187,12 @@ export default {
 							}
 							data.props.msg.styles.top = elmY + 'px';
 					    this.childMsg.push(data);
+//					    记录操作
+					    this.$store.commit('saveRecord',this.childMsg);
+					    console.log(this.$store.state.record)
 //					    创建编辑input
 							this.$store.commit('editorFromMsg',data);
-  		}else if(type == 'dragElm' && dragStatu){
+  		}else if(type == 'dragElm' && dragStatu){//创建后的位移
   			var oldPage = this.$store.state.dragPageMsg
   			var ElmMsg = this.$store.state.editorFrom.msg;
   			var	oldElmMsgIndex = this.childMsg.indexOf(this.$store.state.editorFrom.msg);
@@ -218,11 +222,8 @@ export default {
   		  		ElmMsg.props.msg.styles.left = currentLeft;
   		  		ElmMsg.props.msg.styles.top = currentTop;
   		  		this.childMsg[oldElmMsgIndex] = ElmMsg;
-//			function transStyle(num){
-//				var index = num.indexOf('px');
-//				var result = Number(num.slice(0,index));
-//				return result;
-//			}
+//					记录操作
+				this.$store.commit('saveRecord',this.childMsg);
   		}
   	},
 //	监听编辑器鼠标移动
@@ -246,6 +247,13 @@ export default {
   		var height = len*90 + 'px';
   		return 'height:' + height;
   	},
+//	saveRecord(){
+//		this.getMyWeb.recordArr(this.record,this.childMsg);
+//	},
+//  后退
+		backEditor(){
+			
+		},	
 //	保存信息，并翻译信息
   	save(){
   		var data = {
