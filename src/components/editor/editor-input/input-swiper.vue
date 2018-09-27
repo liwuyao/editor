@@ -18,7 +18,17 @@
 		              height="125"
 		              contain
 		              class="grey darken-4"
-		            ></v-img>
+		            style="height: 100%;"></v-img>
+		            <div class="img-cover" v-if="index != 0">
+		            	<div style="width: 100%;height: 100%;position: relative;color: white;">
+		            		<i class="iconfont icon-shanchu img-delete" @click.stop="deleteImg(item.src)"></i>
+		            	</div>
+		            </div>
+				</div>
+				<div class="img-box">
+					<div style="width: 100%;height: 100%;position: relative;border: 1px solid gainsboro;" class="add-img" @click.stop="addImg()">
+						<i class="el-icon-plus add-icon"></i>
+					</div>
 				</div>
 			</div>
 	    </div>
@@ -47,7 +57,8 @@ import gallery from './gallery';
 				value:'',
 				imgs:[],
 				isShow:'',
-				imgIndex:''
+				imgIndex:'',
+				type:''
 			}
 		},
 		created: function(){
@@ -70,6 +81,7 @@ import gallery from './gallery';
 			openGallery(index){
 				this.isShow = +new Date();
 				this.imgIndex = index;
+				this.type = 'modify';
 			},
 			getImg(img){
 				var images = [];
@@ -79,7 +91,14 @@ import gallery from './gallery';
 						}
 						images.push(obj)
 					}
-					images[this.imgIndex].src = img.src
+					if(this.type == 'modify'){
+						images[this.imgIndex].src = img.src
+					}else if(this.type == 'get'){
+						var newImg = {
+							src: img.src
+						}
+						images.push(newImg)
+					}
 				var data = {
 					count: +new Date,
 					index: this.msg.index,
@@ -88,6 +107,52 @@ import gallery from './gallery';
 					}
 				}
 				this.$store.commit('setEditorFrom',data)
+			},
+			deleteImg(img){
+				var images = [];
+					for(var item of this.imgs){
+						var obj = {
+							src:item.src
+						}
+						images.push(obj)
+					}
+					var current = {
+						src:img
+					}
+					var index = images.indexOf(current);
+						images.splice(index,1);
+						var data = {
+							count: +new Date,
+							index: this.msg.index,
+							msg:{
+								imgUrls:images
+							}
+						}
+					this.$store.commit('setEditorFrom',data)
+			},
+			addImg(){
+				this.isShow = +new Date();
+				this.type = 'get';
+//				var images = [];
+//					for(var item of this.imgs){
+//						var obj = {
+//							src:item.src
+//						}
+//						images.push(obj)
+//					}
+//					var current = {
+//						src:img
+//					}
+//					var index = images.indexOf(current);
+//						images.splice(index,1);
+//						var data = {
+//							count: +new Date,
+//							index: this.msg.index,
+//							msg:{
+//								imgUrls:images
+//							}
+//						}
+//					this.$store.commit('setEditorFrom',data)
 			}
 		}
 	}
@@ -107,9 +172,43 @@ import gallery from './gallery';
 		margin: 2px;
 		overflow: hidden;
 /*		background: black;*/
+		position: relative;
+		cursor: pointer;
 	}
 	.img-box img{
 		margin: auto 0;
 		width: 100%;
+	}
+	.img-box:hover .img-cover{
+		display: block;
+	}
+	.img-cover{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+		display: none;
+		background: rgba(0,0,0,0.5);
+	}
+	.img-cover .img-delete{
+		position: absolute;
+		right: 5px;
+		top: 5px;
+	}
+	.img-delete:hover{
+		transform: scale(1.2,1.2);
+	}
+	.add-img .add-icon{
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+	}
+	.add-img:hover{
+		border: 1px solid #2589FF !important;
+	}
+	.add-img:hover .add-icon{
+		transform: translate(-50%,-50%) scale(1.2,1.2);
 	}
 </style>

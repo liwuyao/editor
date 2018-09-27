@@ -9,14 +9,14 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
-import waterfall from 'vue-waterfall-easy'
+import vcolorpicker from 'vcolorpicker'
  
 Vue.use(Vuetify)
 
 Vue.config.productionTip = false;
 Vue.use(webConfig);
 Vue.use(ElementUI);
-Vue.use(waterfall);
+Vue.use(vcolorpicker)
 
 /* eslint-disable no-new */
 new Vue({

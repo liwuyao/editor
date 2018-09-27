@@ -43,3 +43,20 @@
 .gallery-dailog .el-tabs--border-card>.el-tabs__header{
 	background: none !important;
 }
+/*颜色选择器*/
+.m-colorPicker{
+	z-index: 1000 !important;
+	height: 15px !important;
+}
+.m-colorPicker .colorBtn{
+	width: 212px !important;
+	height: 15px !important;
+	border-radius: 7px;
+			border: 1px solid #2589FF;
+}
+.m-colorPicker .box{
+	width: 212px !important;
+}
+.m-colorPicker .box h3{
+	cursor: default;
+}

@@ -40,7 +40,7 @@
 			</div>
 			<div class="editor-input-text-box" style="margin-top: 10px;">
 		    	<span style="margin-right: 5px;">行高</span>
-		    	<el-input-number v-model="lineH" @change="lineHeight" size="mini" style="width: 90px;" :min="12" :max="30"></el-input-number>
+		    	<el-input-number v-model="lineH" @change="lineHeight" size="mini" style="width: 90px;" :min="12"></el-input-number>
 		    </div>
 		</div>
 	</div>

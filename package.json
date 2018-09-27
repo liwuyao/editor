@@ -17,6 +17,7 @@
     "element-ui": "^2.4.6",
     "font-list": "^1.1.0",
     "pug": "^2.0.3",
+    "vcolorpicker": "^0.1.5",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vue-waterfall": "^1.0.6",
