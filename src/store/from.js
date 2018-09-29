@@ -1,47 +1,36 @@
 export default{
   state: {
   	elmMsg: {
-  		srbutton:{
+  		srfrom:{
   			htmlHead: "<srbutton :btnConfig='",
   			htmlFoot: "'></srbutton>",
   			creatMsg:{
   							htmlHead: "<srbutton :btnConfig='",
   			        htmlFoot: "'></srbutton>",
-				      	name:'srbutton',//按钮信息
+				      	name:'srfrom',//按钮信息
 				      	index: '',
-				      	type:'btn',
-				      	isScale:true,
+				      	type:'from',
+				      	isScale:false,
 				      	props:{
 				      		msg:{
 				      			styles:{
-				      				width:'70px',
-				      				height:'40px',
+				      				width:'200px',
+				      				height:'200px',
 				      				color:'#ccc',
 				      				background: '#409EFF',
 				      				left: '153px',
 				      				top: '',
-				      				'font-size':'14px',
-				      				'font-weight':'100',
-				      				'font-style': 'normal',
-				      				'border-color':'#000'
 				      			},
-				      			content:{
-						      				name: '按钮',
-						      			},
+				      			inputs:[
+				      				{
+					      			name:'demo',
+					      			},
+				      			]
 				      		},
 				      	},
 				      	input:[
-				      			{
-					      			name:'inputname',
-					      		},
 					      		{
 					      			name:'inputsize'
-					      		},
-					      		{
-					      			name:'inputfont',
-					      		},
-					      		{
-					      			name:'inputcolor',
 					      		},
 				      		]
 				     },
@@ -50,5 +39,10 @@ export default{
   	}
   },
   mutations: {
+  	addInput(state,data){
+//		for(var item of data){
+//			  		state.elmMsg.srfrom.creatMsg.props.msg.inputs.push(item);
+//		}
+  	}
   }
 }

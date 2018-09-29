@@ -2,9 +2,9 @@ export default{
   state: {
   	elmMsg: {
   		'srimage':{
-  			htmlHead: "<srimage :imgConfig='",
-  			htmlFoot: "'></srimage>",
   			creatMsg:{
+  				  		htmlHead: "<srimage :imgConfig='",
+  			        htmlFoot: "'></srimage>",
 				      	name:'srimage',//按钮信息
 				      	index: '',
 				      	type:'img',
@@ -32,9 +32,9 @@ export default{
 				     
   		},
   		'srswiper':{
-  			htmlHead: "<srswiper :imgConfig='",
-  			htmlFoot: "'></srswiper>",
   			creatMsg:{
+  				  		htmlHead: "<srswiper :imgConfig='",
+  			        htmlFoot: "'></srswiper>",
 				      	name:'srswiper',//按钮信息
 				      	index: '',
 				      	type:'img',

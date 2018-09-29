@@ -38,7 +38,7 @@
 				    </el-option>
 				</el-select>
 			</div>
-			<div class="editor-input-text-box" style="margin-top: 10px;">
+			<div class="editor-input-text-box" style="margin-top: 10px;" v-if="msg.type !== 'btn'">
 		    	<span style="margin-right: 5px;">行高</span>
 		    	<el-input-number v-model="lineH" @change="lineHeight" size="mini" style="width: 90px;" :min="12"></el-input-number>
 		    </div>
@@ -52,7 +52,9 @@
 		watch:{
 			'msg.index':function(){				
 				this.size = this.getMyWeb.transStyle(this.msg.props.msg.styles['font-size']);
-				this.lineH = this.getMyWeb.transStyle(this.msg.props.msg.styles['line-height']);
+				if(this.msg.type !== 'btn'){
+					this.lineH = this.getMyWeb.transStyle(this.msg.props.msg.styles['line-height']);
+				}
 				this.textAline = this.msg.props.msg.styles['text-align'];
 				this.fontFamily = this.msg.props.msg.styles['font-family'];
 				if(this.msg.props.msg.styles['font-weight'] == 'bolder'){
@@ -121,7 +123,9 @@
 		},
 		created: function(){
 			this.size = this.getMyWeb.transStyle(this.msg.props.msg.styles['font-size']);
-			this.lineH = this.getMyWeb.transStyle(this.msg.props.msg.styles['line-height']);
+			if(this.msg.type !== 'btn'){
+				this.lineH = this.getMyWeb.transStyle(this.msg.props.msg.styles['line-height']);
+			}
 			this.textAline = this.msg.props.msg.styles['text-align'];
 			this.fontFamily = this.msg.props.msg.styles['font-family'];
 			if(this.msg.props.msg.styles['font-weight'] == 'bolder'){

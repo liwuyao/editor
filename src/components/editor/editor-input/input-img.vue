@@ -64,24 +64,6 @@ import gallery from './gallery';
 				this.$store.commit('setEditorFrom',data)
 			},
 			upImg(){
-//				var _input = document.createElement('input');
-//					_input.type = 'file';
-//					_input.accept = 'image/jpeg,image/png';
-//					var _this = this;
-//					_input.onchange = function(e){
-////						console.log(window.URL.createObjectURL(e.target.files[0])); 
-//						_this.isImg = true;
-//						_this.src = window.URL.createObjectURL(e.target.files[0])
-//						var data = {
-//							count: +new Date,
-//							index: _this.msg.index,
-//							msg:{
-//								src: _this.src
-//							}
-//						}
-//						_this.$store.commit('setEditorFrom',data)
-//					}
-//					_input.click();
 					this.isShow = +new Date()
 			},
 			getImg(data){

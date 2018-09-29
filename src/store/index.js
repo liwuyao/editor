@@ -5,6 +5,7 @@ import editorFrom from './editor-from.js'
 import elements from './elements.js'
 import moduleText from './text.js'
 import moduleImg from './img.js'
+import moduleFrom from './from.js'
 Vue.use(Vuex)
 /*
  * dragType拖拽类型，创建拖拽，编辑器
@@ -61,7 +62,8 @@ export default new Vuex.Store({
     editorFrom: editorFrom,
     elements: elements,
     text:moduleText,
-    img:moduleImg
+    img:moduleImg,
+    from:moduleFrom
   }
 })
 

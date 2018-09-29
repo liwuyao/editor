@@ -2,9 +2,9 @@ export default{
   state: {
   	elmMsg: {
   		srtextarea:{
-  			htmlHead: "<srtextarea :textConfig='",
-  			htmlFoot: "'></srtextarea>",
   			creatMsg:{
+  							htmlHead: "<srtextarea :textConfig='",
+  			        htmlFoot: "'></srtextarea>",
 				      	name:'srtextarea',//按钮信息
 				      	index: '',
 				      	type:'text',

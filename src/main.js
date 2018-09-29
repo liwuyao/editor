@@ -10,13 +10,18 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 import vcolorpicker from 'vcolorpicker'
+
+import axios from 'axios'
+import Qs from 'qs'
  
 Vue.use(Vuetify)
 
 Vue.config.productionTip = false;
 Vue.use(webConfig);
 Vue.use(ElementUI);
-Vue.use(vcolorpicker)
+Vue.use(vcolorpicker);
+Vue.prototype.axios = axios;
+Vue.prototype.qs = Qs;
 
 /* eslint-disable no-new */
 new Vue({

@@ -19,6 +19,9 @@
 					    <el-tab-pane label="私人相册" name="first">
 					    	<div class="imgs-box">
 					    		<div  class="imgs-content">
+					    			<div class="imgs">
+						    			<!--<img src="http://pic22.nipic.com/20120725/10144263_134513457178_2.jpg" style="width: 100%;"/>-->
+						    			<i class="el-icon-plus add-img" style="position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);font-size: 18px;font-weight: bolder;" @click="upImg()"></i>						    		</div>
 						    		<div class="imgs" v-for="item in imgs" @click="chooseImg(item)">
 						    			<!--<img src="http://pic22.nipic.com/20120725/10144263_134513457178_2.jpg" style="width: 100%;"/>-->
 						    			<div class="activeImg" v-if="item == currentImg"></div>
@@ -79,71 +82,36 @@
 		      		src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
 		      		info:'小测试'
 		      	},
-		      	{
-		      		src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'http://img1.3lian.com/img013/v4/7/d/4.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'http://img3.3lian.com/2013/c4/95/d/18.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'http://img1.3lian.com/img013/v4/7/d/4.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'http://img3.3lian.com/2013/c4/95/d/18.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'http://img1.3lian.com/img013/v4/7/d/4.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'http://img3.3lian.com/2013/c4/95/d/18.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'http://img1.3lian.com/img013/v4/7/d/4.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'http://img3.3lian.com/2013/c4/95/d/18.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'http://img3.3lian.com/2013/c4/95/d/18.jpg',
-		      		info:'小测试'
-		      	},
-		      	{
-		      		src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-		      		info:'小测试'
-		      	},
 		      ]
 	      };
 		},
 		components: {
 		 },
+		created:function(){
+			console.log('get')
+			this.axios.get('/station/resource/images/5baf3452a17b731cdcb22539', {
+			    params: {
+			      page: 0,
+			      size:10
+			    }
+			  })
+			  .then((res)=> {
+			    if(res.status == '200'){
+			    	var data = res.data.data.content;
+			    	for(var item of data){
+			    		var imgMsg = {
+			    			src:item.savePath,
+			    			info:'新增'
+			    		}
+//			    		this.imgs.push(imgMsg);
+			    	}
+			    	console.log(this.imgs)
+			    }
+			  })
+			  .catch(function (error) {
+			    console.log(error);
+			  });
+		},
 	    methods: {
 	      handleClose(done) {
 	        done();
@@ -162,6 +130,29 @@
 		  confirm(){
 		  	this.$emit('imgSrc',this.currentImg)
 		  	this.dialogVisible = false 
+		  },
+		  upImg(){
+		  	var _input = document.createElement('input');
+			_input.type = 'file';
+			_input.accept = 'image/jpeg,image/png';
+			_input.click();
+			var _this = this;
+			_input.onchange = function(e){
+				var _file = e.target.files[0];
+				var forms = new FormData();
+				forms.append('file', _file);
+				_this.axios.post('http://192.168.201.99:8080/station/resource/image/5baf3452a17b731cdcb22539', forms,{
+						 headers: {
+				            'Content-Type': 'content-type: multipart/form-data'
+				          }
+					})
+				  .then(function (response) {
+				    console.log(response);
+				  })
+				  .catch(function (error) {
+				    console.log(error);
+				  });
+			}
 		  }
 	    }
 	}
@@ -228,4 +219,7 @@
 	  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
 	  background-color:black;
 	} 
+	.add-img:hover{
+		color: #409EFF;
+	}
 </style>

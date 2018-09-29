@@ -1,9 +1,7 @@
 <template>
   <div class="editor-page">
-<!--  	头部-->;
-		<header style="padding: 10px;border-bottom: 1px solid gainsboro">
-			<h4>编辑器</h4>
-		</header>
+<!--  	头部-->
+		<vheadr></vheadr>
 <!--  	选择组件-->
   	<div class="editor-page-content">
   		<div class="frame demo">
@@ -27,6 +25,7 @@
 					  </el-tab-pane>
 					  <el-tab-pane label="页面">
 					  	<p style="padding: 10px 0;text-align: center;">正在开发中</p>
+					  	<button @click="creatElment()">创建站点</button>
 					  </el-tab-pane>
 					</el-tabs>
 	  		</div>
@@ -66,10 +65,11 @@
 import editor from './editor'
 import editorfrom from './editor-from'
 import demobox from './demo-box'
+import vheadr from './header'
 export default {
   name: 'HelloWorld',
   components:{
-  	editor,editorfrom,demobox
+  	editor,editorfrom,demobox,vheadr
   },
   watch:{
 	  	'$store.state.editorFrom.set.count':function(){
@@ -135,9 +135,9 @@ export default {
 		      	},
 		      	{
 		      		icon:'iconfont icon-demo-anniu',
-		      		name:'按钮',
-		      		type:'btn',
-		      		elm:'vbutton'
+		      		name:'表单',
+		      		type:'from',
+		      		elm:'srfrom'
 		      	},
 		      	{
 		      		icon:'iconfont icon-wenben',
@@ -309,25 +309,50 @@ export default {
   		}
   		var htmls = '';
   		var datas = {};
-  		console.log(this.childMsg);
   		for(var item of this.childMsg){
   		var index = this.childMsg.indexOf(item);
 			var name = item.name + index;
-			var elements = this.$store.state[item.type].elmMsg;
-			for(var i in elements){
-				var spliceHtml = ''
-				if(item.name == i){
-					spliceHtml = elements[i].htmlHead + name + elements[i].htmlFoot; 
-				}
+				var spliceHtml = item.htmlHead + name + item.htmlFoot; 
 				htmls += spliceHtml;
 				datas[name] = item.props.msg
-			}
-				
   		}
   		data.html = htmls;
   		data.data = datas;
-  		console.log(data);
-  	}
+//		console.log(JSON.stringify(data));
+  		console.log(JSON.stringify(this.childMsg));
+  	},
+//	创建站点
+		creatElment(){
+			var data = {
+				merchantId: '1234',
+		    stationName: 'firstStation'
+			};
+			data = this.qs.stringify(data);
+			this.axios.post('http://192.168.201.99:8080/station/', data,{
+				 headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+			})
+		  .then(function (response) {
+		    console.log(response);
+		  })
+		  .catch(function (error) {
+		    console.log(error);
+		  });
+		}
+//			this.axios.get('/station/resource/images/1123123', {
+//			    params: {
+//			      page: 0,
+//			      size:10
+//			    }
+//			  })
+//			  .then(function (response) {
+//			    console.log(response);
+//			  })
+//			  .catch(function (error) {
+//			    console.log(error);
+//			  });
+//		}
   }
 }
 </script>
