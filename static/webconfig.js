@@ -3,6 +3,11 @@ const fontList = require('font-list');
 export default {
     install(Vue, options) {
         Vue.prototype.getMyWeb = {
+					stationMsg:function(){
+						  	var data = window.localStorage.getItem('EDITORSTATIONMSG');
+						  			data = JSON.parse(data);
+						  	return data;
+					},
         	objectSetVal:function(val,old){//复制对象
         		for(var i in old){
 					if(typeof(old[i]) == 'object' && !Array.isArray(old[i])){

@@ -25,7 +25,6 @@
 					  </el-tab-pane>
 					  <el-tab-pane label="页面">
 					  	<p style="padding: 10px 0;text-align: center;">正在开发中</p>
-					  	<button @click="creatElment()">创建站点</button>
 					  </el-tab-pane>
 					</el-tabs>
 	  		</div>
@@ -34,7 +33,7 @@
 	  	<div class="frame editor">
 	  			<div style="width: 375px;margin: 0 auto;">
 		  				<header class="editor-header">首页</header>
-			  		  <div style="display: inline-block;"  @drop="editorDragOver($event)" @dragover="allowDrop($event)"
+			  		  <div style="display: inline-block;"  @drop="editorDragOver($event,'drag')" @dragover="allowDrop($event)"
 			  		  	@click="editorClick($event)">
 			  		  	<editor :childMsg=childMsg></editor>
 			  		  </div>
@@ -58,6 +57,7 @@
 	  	</div>
   	</div>
 <!--  	<order-btn :status="status"></order-btn>-->
+<!--		<create-form :isShowDialog="dialogFormVisible" v-on:childByValue="childByValue"></create-form>-->
   </div>
 </template>
 
@@ -66,10 +66,11 @@ import editor from './editor'
 import editorfrom from './editor-from'
 import demobox from './demo-box'
 import vheadr from './header'
+import createForm from './header'
 export default {
   name: 'HelloWorld',
   components:{
-  	editor,editorfrom,demobox,vheadr
+  	editor,editorfrom,demobox,vheadr,createForm
   },
   watch:{
 	  	'$store.state.editorFrom.set.count':function(){
@@ -93,7 +94,9 @@ export default {
   		 * demoBtnActive: 当前模板种类选择名称
   		 * demoDragMsg：开始拖拽模板记录的位置信息
   		 * startChooseElm：记录要创建组件的选择信息
-  		 * record:编辑记录
+  		 * recordSteep:撤销步数
+  		 * recoverySteep：恢复步数
+  		 * dialogFormVisible 表单弹框
   		 */
   data () {
     return {
@@ -119,7 +122,7 @@ export default {
 		      		icon:'iconfont icon-wenben',
 		      		name:'文本',
 		      		type:'text',
-		      		elm:'srtextarea'
+		      		elm:'srtext'
 		      	},
 		      	{
 		      		icon:'iconfont icon-tupian',
@@ -150,6 +153,7 @@ export default {
       ],
       recordSteep:0,
       recoverySteep:0,
+      dialogFormVisible:false,
     }
   },
   created:function(){
@@ -180,15 +184,15 @@ export default {
   	allowDrop(ev){
 			ev.preventDefault();
 		},
-  	editorDragOver(event){
+  	editorDragOver(event,creatType){
   		var type = this.$store.state.dragType;
   				//		光标位置记录位置
-  		var cursorX = event.offsetX;
-			var cursorY = event.offsetY;
-			var dragStatu = this.$store.state.dragStatu
+  		if(creatType == 'drag'){
+  			var cursorX = event.offsetX;
+			  var cursorY = event.offsetY;
+  		}
+			var dragStatu = this.$store.state.dragStatu;
   		if(type == 'creatElm' && dragStatu){//开始创建
-					var elmX = cursorX - this.demoDragMsg.left;
-					var elmY = cursorY - this.demoDragMsg.top;
 					var index = this.childMsg.length;
 					var elmName = this.startChooseElm.elm;
 //					元素数据基础类型
@@ -197,10 +201,17 @@ export default {
 //							赋值函数
 						 this.getMyWeb.objectSetVal(data,getMSg)
 							data.index = index;
-							if(elmX<0){
-								elmX = 0
+							if(creatType == 'drag'){
+								var elmX = cursorX - this.demoDragMsg.left;
+						    var elmY = cursorY - this.demoDragMsg.top;
+								if(elmX<0){
+									elmX = 0
+								}
+								data.props.msg.styles.top = elmY + 'px';
 							}
-							data.props.msg.styles.top = elmY + 'px';
+							if(creatType == 'click'){
+								data.props.msg.styles.top = 0 + 'px';
+							}
 					    this.childMsg.push(data);
 //					    记录操作
 					    this.$store.commit('saveRecord',this.childMsg);
@@ -303,56 +314,45 @@ export default {
     },
 //	保存信息，并翻译信息
   	save(){
-  		var data = {
-  			html:'',
-  			data:{},
-  		}
-  		var htmls = '';
-  		var datas = {};
-  		for(var item of this.childMsg){
-  		var index = this.childMsg.indexOf(item);
-			var name = item.name + index;
-				var spliceHtml = item.htmlHead + name + item.htmlFoot; 
-				htmls += spliceHtml;
-				datas[name] = item.props.msg
-  		}
-  		data.html = htmls;
-  		data.data = datas;
-//		console.log(JSON.stringify(data));
-  		console.log(JSON.stringify(this.childMsg));
-  	},
-//	创建站点
-		creatElment(){
-			var data = {
-				merchantId: '1234',
-		    stationName: 'firstStation'
-			};
-			data = this.qs.stringify(data);
-			this.axios.post('http://192.168.201.99:8080/station/', data,{
-				 headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-			})
-		  .then(function (response) {
-		    console.log(response);
-		  })
-		  .catch(function (error) {
-		    console.log(error);
-		  });
-		}
-//			this.axios.get('/station/resource/images/1123123', {
-//			    params: {
-//			      page: 0,
-//			      size:10
-//			    }
-//			  })
-//			  .then(function (response) {
-//			    console.log(response);
-//			  })
-//			  .catch(function (error) {
-//			    console.log(error);
-//			  });
+//		var data = {
+//			html:'',
+//			data:{},
 //		}
+//		var htmls = '';
+//		var datas = {};
+//		for(var item of this.childMsg){
+//		var index = this.childMsg.indexOf(item);
+//			var name = item.name + index;
+//				var spliceHtml = item.htmlHead + name + item.htmlFoot; 
+//				htmls += spliceHtml;
+//				datas[name] = item.props.msg
+//		}
+//		data.html = htmls;
+//		data.data = datas;
+//		console.log(JSON.stringify(data));
+//		console.log(JSON.stringify(this.childMsg));
+			var id = this.getMyWeb.stationMsg().id;
+			var data = {
+				stationId:id,
+				filename:'index.vue',
+				filePath:'pages/index',
+				components:this.childMsg
+			}
+//			this.fromPost('/station/page/',data,function(res){
+//				
+//			},function(err){
+//				console.log(err)
+//			})
+				this.axios.post('/station/page/',data)
+				.then((res)=>{
+					console.log(res)
+				})
+			
+  	},
+		childByValue(childValue) {
+        // childValue就是子组件传过来的值
+        this.dialogFormVisible = childValue
+    }
   }
 }
 </script>

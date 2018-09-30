@@ -1,11 +1,11 @@
 export default{
   state: {
   	elmMsg: {
-  		srtextarea:{
+  		srtext:{
   			creatMsg:{
-  							htmlHead: "<srtextarea :textConfig='",
-  			        htmlFoot: "'></srtextarea>",
-				      	name:'srtextarea',//按钮信息
+  							htmlHead: "<srtext :textConfig='",
+  			        htmlFoot: "'></srtext>",
+				      	name:'srtext',//按钮信息
 				      	index: '',
 				      	type:'text',
 				      	isScale:true,

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		demo<input type="text" name="" id="" value=""  style="border: 1px solid red;"/>
+		小测试
 	</div>
 </template>
 

@@ -1,10 +1,10 @@
 
 <script>
 	import srbutton from '../button/button'
-	import srtextarea from '../text/textarea'
+	import srtext from '../text/sr-text'
 	import srimage from '../image/sr-image'
 	import srswiper from '../image/sr-swiper'
-	import srfrom from '../from/sr-from'
+	import srfrom from './demo'
 	var dragBox = {
 		template:`
 			<div class="draw-box" :draggable="drag" @mousedown="startDrag">
@@ -37,7 +37,7 @@
 	export default {
 	  props: ['msg'],
 	  components:{
-	  	srbutton,srtextarea,dragBox,srimage,srswiper,srfrom
+	  	srbutton,srtext,dragBox,srimage,srswiper,srfrom
 	  },
 	  computed:{
 	  	styles:function(){

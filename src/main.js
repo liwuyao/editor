@@ -24,6 +24,58 @@ Vue.prototype.axios = axios;
 Vue.prototype.qs = Qs;
 
 /* eslint-disable no-new */
+Vue.mixin({
+  data() {
+    return {
+    	staticConfig:{
+    		stationId:'',
+    	}
+    }
+  },
+  methods: {
+        fromPost(url,data,success,err){
+        		var send = Qs.stringify(data)
+        		this.axios.post(url, data,{
+					headers: {
+			            'Content-Type': 'application/x-www-form-urlencoded'
+			          }
+					})
+					.then(function (response) {
+					   success(response)
+					})
+					.catch(function (error) {
+					    err(error)
+					});
+        },
+        upload(url,data,success,err){
+        		this.axios.post(url, data,{
+						 headers: {
+				            'Content-Type': 'content-type: multipart/form-data'
+				          }
+					})
+				  .then(function (response) {
+				    success(response)
+				  })
+				  .catch(function (error) {
+				    err(error)
+				  });
+        },
+        get(url,data,success,err){
+        		this.axios.get(url, {
+				    params: data
+				  })
+				  .then(function(res){
+				  	success(response)
+				  })
+				  .catch(function (error) {
+				    err(error)
+				  });
+	    }
+  },
+  created() {
+  }
+})
+
 new Vue({
   el: '#app',
   router,

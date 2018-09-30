@@ -21,7 +21,8 @@
 					    		<div  class="imgs-content">
 					    			<div class="imgs">
 						    			<!--<img src="http://pic22.nipic.com/20120725/10144263_134513457178_2.jpg" style="width: 100%;"/>-->
-						    			<i class="el-icon-plus add-img" style="position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);font-size: 18px;font-weight: bolder;" @click="upImg()"></i>						    		</div>
+						    			<i class="el-icon-plus add-img" style="position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);font-size: 18px;font-weight: bolder;" @click="upImg()"></i>
+					    			</div>
 						    		<div class="imgs" v-for="item in imgs" @click="chooseImg(item)">
 						    			<!--<img src="http://pic22.nipic.com/20120725/10144263_134513457178_2.jpg" style="width: 100%;"/>-->
 						    			<div class="activeImg" v-if="item == currentImg"></div>
@@ -34,6 +35,11 @@
 								            ></v-img>
 								            <div class="imgs-text">{{item.info}}</div>
 								        </v-card>
+								        <div class="img-cover">
+							            	<div style="width: 100%;height: 100%;position: relative;color: white;">
+							            		<i class="iconfont icon-shanchu img-delete" @click.stop="deleteImg(item)"></i>
+							            	</div>
+							            </div>
 						    		</div>
 						    	</div>
 					    	</div>
@@ -78,39 +84,13 @@
 	        activeName2:'first',
 	        currentImg:'',
 	        imgs:[
-		      	{
-		      		src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-		      		info:'小测试'
-		      	},
 		      ]
 	      };
 		},
 		components: {
 		 },
 		created:function(){
-			console.log('get')
-			this.axios.get('/station/resource/images/5baf3452a17b731cdcb22539', {
-			    params: {
-			      page: 0,
-			      size:10
-			    }
-			  })
-			  .then((res)=> {
-			    if(res.status == '200'){
-			    	var data = res.data.data.content;
-			    	for(var item of data){
-			    		var imgMsg = {
-			    			src:item.savePath,
-			    			info:'新增'
-			    		}
-//			    		this.imgs.push(imgMsg);
-			    	}
-			    	console.log(this.imgs)
-			    }
-			  })
-			  .catch(function (error) {
-			    console.log(error);
-			  });
+			this.getImg();
 		},
 	    methods: {
 	      handleClose(done) {
@@ -131,6 +111,34 @@
 		  	this.$emit('imgSrc',this.currentImg)
 		  	this.dialogVisible = false 
 		  },
+		  getImg(){
+		  	this.imgs = [];
+		  	this.axios.get('/station/resource/images/5baf3452a17b731cdcb22539', {
+			    params: {
+			      page: 0,
+			      size:10
+			    }
+			  })
+			  .then((res)=> {
+			    if(res.status == '200'){
+			    	var data = res.data.data.content;
+			        var index = 0;
+			    	for(var item of data){
+			    			index += 1;
+			    		var imgMsg = {
+			    			src:item.savePath,
+			    			info:'img' + index,
+			    			id: item.id
+			    		}
+			    		this.imgs.push(imgMsg);
+			    	}
+			    	console.log(this.imgs)
+			    }
+			  })
+			  .catch(function (error) {
+			    console.log(error);
+			  });
+		  },
 		  upImg(){
 		  	var _input = document.createElement('input');
 			_input.type = 'file';
@@ -146,13 +154,27 @@
 				            'Content-Type': 'content-type: multipart/form-data'
 				          }
 					})
-				  .then(function (response) {
-				    console.log(response);
+				  .then(function (res) {
+				    if(res.status == 200){
+				    	_this.getImg()
+				    }
 				  })
 				  .catch(function (error) {
 				    console.log(error);
 				  });
 			}
+		  },
+		  deleteImg(data){
+		  	console.log(data)
+		  var _url = '/station/resource/image/' + data.id;
+		  this.axios.delete(_url)
+            .then((res)=> {
+          		if(res.status == 200){
+          			this.getImg()
+          		}
+            }).catch(function (error) {
+			    console.log(error);
+			});
 		  }
 	    }
 	}
@@ -221,5 +243,26 @@
 	} 
 	.add-img:hover{
 		color: #409EFF;
+	}
+/*	遮罩层*/
+	.imgs:hover .img-cover{
+		display: block;
+	}
+	.img-cover{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+		display: none;
+		background: rgba(0,0,0,0.5);
+	}
+	.img-cover .img-delete{
+		position: absolute;
+		right: 5px;
+		top: 5px;
+	}
+	.img-delete:hover{
+		transform: scale(1.2,1.2);
 	}
 </style>
