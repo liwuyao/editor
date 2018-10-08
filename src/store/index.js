@@ -14,6 +14,7 @@ Vue.use(Vuex)
  * hideScaleBox 隐藏放缩框
  * record 记录操作，用以撤销
  * recovery 记录撤销，用以恢复
+ * editorMenuMsg 编辑器菜单信息
  */
 export default new Vuex.Store({
   state: {
@@ -26,7 +27,13 @@ export default new Vuex.Store({
     hideScaleBox:false,
     childMsg:[],
     record:[],
-    recovery:[]
+    recovery:[],
+    editorMenuMsg:{
+    	status:false,//菜单状态
+    	elmMsg:{},//组件信息
+    	left:'',
+    	top:''
+    },
   },
   mutations: {
     changeClientKey(state,key) {
@@ -54,6 +61,11 @@ export default new Vuex.Store({
     		state.recovery = []
     	}else{
     		recordArr(state.recovery,data)
+    	}
+    },
+    changeEditorMenu(state,data){
+    	for(var i in data){
+    		state.editorMenuMsg[i] = data[i]
     	}
     }
   },

@@ -43,15 +43,16 @@
 		methods:{
 				//		预览
 			preview(){
-				var id = this.getMyWeb.stationMsg().id;
-				console.log(id)
-				var _url = '/station/view/h5/' + id
+//				var id = this.getMyWeb.stationMsg().id;
+//				console.log(id)
+				var _url = '/station/view/h5/' + this.getMyWeb.stationId;
+				var win = window.open('./static/preview.html');
 				this.axios.get(_url)
 				.then((res)=>{
-				  console.log(res);
-				  window.open('http://192.168.201.99:8080'+ res.data.data);
+//				  window.open('http://192.168.201.167'+ res.data.data);
+				  win.document.getElementById('jump').dataset.url = 'http://192.168.201.167:8080'+ res.data.data
 				}).catch((res)=>{
-					console.log(res)
+				  console.log(res)
 				})
 			},
 //			创建弹框关闭前
@@ -74,7 +75,7 @@
 	        return
 				}
 				var data = this.qs.stringify(this.creatStationMsg);
-				this.axios.post('http://192.168.201.99:8080/station/', data,{
+				this.axios.post('/station/', data,{
 					 headers: {
 	            'Content-Type': 'application/x-www-form-urlencoded'
 	          }
@@ -85,7 +86,8 @@
 		          message: '站点创建成功',
 		          type: 'success'
 		       });
-		        window.localStorage.setItem('EDITORSTATIONMSG',JSON.stringify(res.data.data))
+		        window.localStorage.setItem('EDITORSTATIONMSG',JSON.stringify(res.data.data));
+		        this.getMyWeb.stationId = res.data.data;
 		        this.dialogVisible = false
 			    }
 			  })

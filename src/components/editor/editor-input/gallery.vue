@@ -113,7 +113,8 @@
 		  },
 		  getImg(){
 		  	this.imgs = [];
-		  	this.axios.get('/station/resource/images/5baf3452a17b731cdcb22539', {
+		  	console.log(this.stationId);
+		  	this.axios.get('/station/resource/images/' + this.getMyWeb.stationId, {
 			    params: {
 			      page: 0,
 			      size:10
@@ -149,7 +150,7 @@
 				var _file = e.target.files[0];
 				var forms = new FormData();
 				forms.append('file', _file);
-				_this.axios.post('http://192.168.201.99:8080/station/resource/image/5baf3452a17b731cdcb22539', forms,{
+				_this.axios.post('/station/resource/image' + this.getMyWeb.stationId, forms,{
 						 headers: {
 				            'Content-Type': 'content-type: multipart/form-data'
 				          }
@@ -165,7 +166,6 @@
 			}
 		  },
 		  deleteImg(data){
-		  	console.log(data)
 		  var _url = '/station/resource/image/' + data.id;
 		  this.axios.delete(_url)
             .then((res)=> {

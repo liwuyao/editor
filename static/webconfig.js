@@ -3,7 +3,8 @@ const fontList = require('font-list');
 export default {
     install(Vue, options) {
         Vue.prototype.getMyWeb = {
-					stationMsg:function(){
+        	stationId:'',//站点id
+			stationMsg:function(){//从本地获取站点id
 						  	var data = window.localStorage.getItem('EDITORSTATIONMSG');
 						  			data = JSON.parse(data);
 						  	return data;

@@ -33,21 +33,43 @@
 	  	<div class="frame editor">
 	  			<div style="width: 375px;margin: 0 auto;">
 		  				<header class="editor-header">首页</header>
-			  		  <div style="display: inline-block;"  @drop="editorDragOver($event,'drag')" @dragover="allowDrop($event)"
-			  		  	@click="editorClick($event)">
-			  		  	<editor :childMsg=childMsg></editor>
+			  		  <div style="display: inline-block;position: relative;height: 667px;overflow: auto;"  @drop="editorDragOver($event,'drag')" @dragover="allowDrop($event)"
+			  		  	@click="editorClick($event)" @scroll="pageScroll" id="editorScrollBox">
+			  		  	<editor :childMsg=childMsg :defaultMsg=editorDefaultMsg></editor>
+			<!--  		  	菜单栏-->
+								<div id="editor-menu" v-if="editorMenuStatu" :style="editorMenuStyle">
+									<div class="editor-menu-botton" @click="deleteElm()">删除</div>
+									<div class="editor-menu-botton">复制</div>
+									<div class="editor-menu-botton">置顶</div>
+									<div class="editor-menu-botton">移至上一层</div>
+									<div class="editor-menu-botton" style="border: none;">移至下一层</div>
+								</div>
 			  		  </div>
 	  			</div>
 	  	</div>
 	  	<div class="frame editor-from">
 	  		<div class="editor-handle">
 	  			<div style="width: 100%;text-align: center;position: absolute;top: 50%;transform: translateY(-50%);">
-	  				<div @click="save()">保存</div>
+	  				<div @click="save()">
+	  					<i class="iconfont icon-baocun"></i>
+	  				</div>
 	  				<div @click="editorBack()" style="margin-top: 10px;">
 	  					<i class="iconfont icon-daohangchexiao"></i>
 	  				</div>
 	  				<div @click="editorRecovery()" style="margin-top: 10px;">
 	  					<i class="iconfont icon-qianjin-kong" style="font-size: 18px;"></i>
+	  				</div>
+	  				<div style="margin-top: 10px;display: flex;flex-direction: column;">
+	  					<div @mousedown="shorteningPage()" id="shorteningPage">
+	  						<i class="iconfont icon-jjian-" style="font-size: 18px;"></i>
+	  					</div>
+	  					<div style="font-size: 12px;margin: 5px 0;">
+	  						<!--{{editorDefaultMsg.pageLength}}-->
+	  						<input type="text" :value="editorDefaultMsg.pageLength" @blur="pageLengthInput($event)" style="width: 30px;border: 1px solid gainsboro;text-align: center;padding: 2px 0;"/>
+	  					</div>
+	  					<div @mousedown="stretchPage()" id="stretchPage">
+	  						<i class="iconfont icon-jjia-" style="font-size: 18px;"></i>
+	  					</div>
 	  				</div>
 	  			</div>
 	  		</div>
@@ -97,6 +119,10 @@ export default {
   		 * recordSteep:撤销步数
   		 * recoverySteep：恢复步数
   		 * dialogFormVisible 表单弹框
+  		 * editorMenuStatu 编辑器菜单状态
+  		 * editorMenuStyle  编辑器菜单样式
+  		 * pageLength 页面长度
+  		 * editorDefaultMsg
   		 */
   data () {
     return {
@@ -153,13 +179,30 @@ export default {
       ],
       recordSteep:0,
       recoverySteep:0,
-      dialogFormVisible:false,
+      editorMenuStatus:false,
+      editorMenuStyle:'',
+      pageLength:667,
+      editorDefaultMsg:{
+      	pageLength:667,
+      }
+      
     }
   },
   created:function(){
+//	测试站点
+//  this.getMyWeb.stationId = '5baf3452a17b731cdcb22539';
+	  this.getMyWeb.stationId  = this.getMyWeb.stationMsg().id;
   },
   computed: {
-    // 计算属性的 getter
+//    编辑器菜单栏状态
+		editorMenuStatu:function(){
+			var msg = this.$store.state.editorMenuMsg;
+//					console
+			var statu = msg.status;
+			var styles = "left:"+ msg.left + "px;top:" + msg.top + 'px';
+			this.editorMenuStyle = styles
+			return statu;
+		}
   },
   methods:{
 //	手风琴函数
@@ -168,10 +211,19 @@ export default {
     },
 //  监听全局点击事件
 	editorClick(e){
+//		隐藏拉伸框
 		var id = e.target.id;
 		if(id == 'editorBox'){
 			this.$store.commit('changeHideScaleBox',false);
 		}
+//		********隐藏编辑菜单栏*****************
+		var data = {
+				status:false
+			}
+			this.$store.commit('changeEditorMenu',data)
+	},
+	pageScroll(){//页面滚动
+		
 	},
 //	编辑盒子鼠标下落事件
   	demoDrag(ev,data){
@@ -314,41 +366,63 @@ export default {
     },
 //	保存信息，并翻译信息
   	save(){
-//		var data = {
-//			html:'',
-//			data:{},
-//		}
-//		var htmls = '';
-//		var datas = {};
-//		for(var item of this.childMsg){
-//		var index = this.childMsg.indexOf(item);
-//			var name = item.name + index;
-//				var spliceHtml = item.htmlHead + name + item.htmlFoot; 
-//				htmls += spliceHtml;
-//				datas[name] = item.props.msg
-//		}
-//		data.html = htmls;
-//		data.data = datas;
-//		console.log(JSON.stringify(data));
-//		console.log(JSON.stringify(this.childMsg));
-			var id = this.getMyWeb.stationMsg().id;
+			var id = this.getMyWeb.stationId;
 			var data = {
 				stationId:id,
 				filename:'index.vue',
 				filePath:'pages/index',
 				components:this.childMsg
 			}
-//			this.fromPost('/station/page/',data,function(res){
-//				
-//			},function(err){
-//				console.log(err)
-//			})
 				this.axios.post('/station/page/',data)
 				.then((res)=>{
 					console.log(res)
 				})
 			
   	},
+//	菜单栏
+		deleteElm(){//删除组件
+			var msg = this.$store.state.editorMenuMsg.elmMsg;
+			this.childMsg.splice(msg.index,1);
+			var data = {
+				status:false
+			}
+			this.$store.commit('changeEditorMenu',data)
+		},
+		pageLengthInput(e){
+			var val = e.target.value;
+			if(val <= 667){
+				e.target.value = 667;
+				this.editorDefaultMsg.pageLength = 667;
+				return
+			}else{
+				this.editorDefaultMsg.pageLength = Number(val);
+			}
+		},
+		stretchPage(){//加长页面
+			var elm = document.getElementById('editorScrollBox');
+			var timer = setInterval(()=>{
+					this.editorDefaultMsg.pageLength += 1;
+					elm.scrollTop = this.editorDefaultMsg.pageLength - 667
+			},100)
+			document.getElementById('stretchPage').onmouseup=function(){
+				clearInterval(timer);
+			}
+		},
+		shorteningPage(){
+			var elm = document.getElementById('editorScrollBox');
+			if(this.editorDefaultMsg.pageLength <= 667) return;
+			var timer = setInterval(()=>{
+					this.editorDefaultMsg.pageLength -= 1;
+					elm.scrollTop = this.editorDefaultMsg.pageLength - 667;
+					if(this.editorDefaultMsg.pageLength <= 667){
+						clearInterval(timer);
+					}
+			},100)
+			document.getElementById('shorteningPage').onmouseup=function(){
+				clearInterval(timer);
+			}
+		},
+//	表单弹框
 		childByValue(childValue) {
         // childValue就是子组件传过来的值
         this.dialogFormVisible = childValue
@@ -461,5 +535,27 @@ export default {
 		width: 60px;
 		height: 100%;
 		position: relative;
+	}
+/*	菜单栏css*/
+	#editor-menu{
+		position: absolute;
+		top: 0;
+		left: 0;
+		background: white;
+		width: 150px;
+		height: 202px;
+		text-align: center;
+		border: 1px solid gainsboro;
+		border-radius:3px ;
+	}
+	.editor-menu-botton{
+		height: 40px;
+		line-height: 40px;
+		border-bottom: 1px solid gainsboro;
+		cursor: pointer;
+	}
+	.editor-menu-botton:hover{
+		background: #2589FF;
+		color: white;
 	}
 </style>

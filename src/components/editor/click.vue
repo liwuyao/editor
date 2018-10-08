@@ -534,6 +534,22 @@
 							 _this.$store.commit('changeDragStatu',_this.dragStatu);
 							_this.$store.commit('setStartPageX',data);
 							}
+            	  	},
+            	  	contextmenu:function(e){//打开菜单栏
+            	  		var e = e || event;
+            	  		e.stopPropagation();
+            	  		e.preventDefault();
+            	  		var oldLeft = _this.getMyWeb.transStyle(_this.msg.props.msg.styles.left);
+            	  		var oldTop = _this.getMyWeb.transStyle(_this.msg.props.msg.styles.top);
+            	  		var left = e.offsetX + oldLeft; //当前菜单栏left
+            	  		var top = e.offsetY + oldTop;//当前菜单栏top
+            	  		var data = {
+            	  			status:true,
+            	  			elmMsg:_this.msg,
+            	  			left: left,
+            	  			top:top
+            	  		}
+            	  		_this.$store.commit('changeEditorMenu',data);
             	  	}
             	  }
 				 },
@@ -592,7 +608,8 @@
 		width:8px;
 		height:8px;
 		border-radius: 50%;
-		background:orangered;
+		border: 1px solid orange;
+		background: white;
 		left: 50%;
 		transform: translateX(-50%);
 	}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="jump" data-url="">页面正在生成中，请耐心等待</div>
+	</body>
+	<script>
+		var elm = document.getElementById('jump');
+		var timer = setInterval(function(){
+			var _url = elm.dataset.url;
+			if(_url){
+				console.log(_url)
+				window.location.href=_url;
+				clearInterval(timer);
+				console.log('ok')
+			}
+			console.log('22')
+		},500)
+	</script>
+</html>

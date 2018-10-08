@@ -11,7 +11,7 @@
             return createElement('div',{
             	style: {
 				    width: '375px',
-				    height: '667px',
+				    height: this.defaultMsg.pageLength + 'px',
 				    background: 'white',
 				    position:'relative',
 				    overflow:'hidden'

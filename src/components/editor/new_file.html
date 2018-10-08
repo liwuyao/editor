@@ -13,11 +13,17 @@
 		<div id="box"></div>
 	</body>
 	<script>
+				window.onmousedown=function(event){
+//					var e = e || event;
+					console.log(event.preventDefault)
+					event.preventDefault();
+				}
 				window.onload=function  () {
 				var oBox = document.getElementById('box');
 				var a=0;b=0;
 				
 				oBox.onmousedown=function  (ev) {
+					ev.preventDefault();
 					var oEvent = ev || event;
 					var X=oEvent.clientX;
 					var Y=oEvent.clientY;
