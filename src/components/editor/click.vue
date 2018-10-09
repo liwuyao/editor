@@ -43,7 +43,8 @@
 	  	styles:function(){
 	  		var data = {
 	  			left: this.msg.props.msg.styles.left,
-	  			top: this.msg.props.msg.styles.top
+	  			top: this.msg.props.msg.styles.top,
+	  			'z-index': this.msg.props.msg.styles['z-index']
 	  		}
 	  		return data
 	  	}

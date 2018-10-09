@@ -6,7 +6,10 @@
 
 <script>
 	export default{
-		
+		props:['inputs'],
+		created:function(){
+			console.log(this.inputs)
+		}
 	}
 </script>
 

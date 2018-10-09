@@ -150,7 +150,7 @@
 				var _file = e.target.files[0];
 				var forms = new FormData();
 				forms.append('file', _file);
-				_this.axios.post('/station/resource/image' + this.getMyWeb.stationId, forms,{
+				_this.axios.post('/station/resource/image/' + _this.getMyWeb.stationId, forms,{
 						 headers: {
 				            'Content-Type': 'content-type: multipart/form-data'
 				          }

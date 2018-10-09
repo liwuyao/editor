@@ -39,10 +39,10 @@
 			<!--  		  	菜单栏-->
 								<div id="editor-menu" v-if="editorMenuStatu" :style="editorMenuStyle">
 									<div class="editor-menu-botton" @click="deleteElm()">删除</div>
-									<div class="editor-menu-botton">复制</div>
-									<div class="editor-menu-botton">置顶</div>
-									<div class="editor-menu-botton">移至上一层</div>
-									<div class="editor-menu-botton" style="border: none;">移至下一层</div>
+									<div class="editor-menu-botton" @click="copyElm()">复制</div>
+									<div class="editor-menu-botton" @click="elmSetTop()">置顶</div>
+									<div class="editor-menu-botton" @click="elmUp()">移至上一层</div>
+									<div class="editor-menu-botton" style="border: none;" @click="elmDown()">移至下一层</div>
 								</div>
 			  		  </div>
 	  			</div>
@@ -50,30 +50,33 @@
 	  	<div class="frame editor-from">
 	  		<div class="editor-handle">
 	  			<div style="width: 100%;text-align: center;position: absolute;top: 50%;transform: translateY(-50%);">
-	  				<div @click="save()">
-	  					<i class="iconfont icon-baocun"></i>
+	  				<div @click="save()" class="editor-handle-btn">
+	  					<div class="editor-handle-btn-text">保存</div><i class="iconfont icon-baocun"></i>
 	  				</div>
-	  				<div @click="editorBack()" style="margin-top: 10px;">
-	  					<i class="iconfont icon-daohangchexiao"></i>
+	  				<div @click="editorBack()" style="margin-top: 10px;" class="editor-handle-btn">
+	  					<div class="editor-handle-btn-text">撤销</div><i class="iconfont icon-daohangchexiao"></i>
 	  				</div>
-	  				<div @click="editorRecovery()" style="margin-top: 10px;">
-	  					<i class="iconfont icon-qianjin-kong" style="font-size: 18px;"></i>
+	  				<div @click="editorRecovery()" style="margin-top: 10px;" class="editor-handle-btn">
+	  					<div class="editor-handle-btn-text">恢复</div><i class="iconfont icon-qianjin-kong" style="font-size: 18px;"></i>
 	  				</div>
-	  				<div style="margin-top: 10px;display: flex;flex-direction: column;">
-	  					<div @mousedown="shorteningPage()" id="shorteningPage">
-	  						<i class="iconfont icon-jjian-" style="font-size: 18px;"></i>
-	  					</div>
-	  					<div style="font-size: 12px;margin: 5px 0;">
-	  						<!--{{editorDefaultMsg.pageLength}}-->
-	  						<input type="text" :value="editorDefaultMsg.pageLength" @blur="pageLengthInput($event)" style="width: 30px;border: 1px solid gainsboro;text-align: center;padding: 2px 0;"/>
-	  					</div>
-	  					<div @mousedown="stretchPage()" id="stretchPage">
-	  						<i class="iconfont icon-jjia-" style="font-size: 18px;"></i>
-	  					</div>
+	  				<div style="margin-top: 10px;"  class="editor-handle-btn">
+	  					<div class="editor-handle-btn-text" style="padding: 0;">页长</div>
+	  					<div style="display: flex;flex-direction: column;">
+		  					<div @mousedown="shorteningPage()" id="shorteningPage">
+		  						<i class="iconfont icon-jjian-" style="font-size: 18px;"></i>
+		  					</div>
+		  					<div style="font-size: 12px;margin: 5px 0;">
+		  						<!--{{editorDefaultMsg.pageLength}}-->
+		  						<input type="text" :value="editorDefaultMsg.pageLength" @blur="pageLengthInput($event)" style="width: 30px;border: 1px solid gainsboro;text-align: center;padding: 2px 0;"/>
+		  					</div>
+		  					<div @mousedown="stretchPage()" id="stretchPage">
+		  						<i class="iconfont icon-jjia-" style="font-size: 18px;"></i>
+		  					</div>
+		  				</div>
 	  				</div>
 	  			</div>
 	  		</div>
-	  		<div style="flex: 1;padding: 10px;">
+	  		<div style="flex: 1;padding: 10px;overflow: auto;">
 	  			<editorfrom></editorfrom>
 	  		</div>
 	  	</div>
@@ -253,6 +256,7 @@ export default {
 //							赋值函数
 						 this.getMyWeb.objectSetVal(data,getMSg)
 							data.index = index;
+							data.props.msg.styles['z-index'] = String(index);
 							if(creatType == 'drag'){
 								var elmX = cursorX - this.demoDragMsg.left;
 						    var elmY = cursorY - this.demoDragMsg.top;
@@ -327,26 +331,17 @@ export default {
   		var height = len*90 + 'px';
   		return 'height:' + height;
   	},
-//	saveRecord(){
-//		this.getMyWeb.recordArr(this.record,this.childMsg);
-//	},
 //  撤销
 		editorBack(){
 			this.recordSteep +=1;
 			var len = this.$store.state.record.length -1;
-//			if(this.recordSteep == 1){
-//				this.$store.commit('saveRecovery',false);
-//			}
 			if(len-this.recordSteep >= 0){
 				this.childMsg = this.$store.state.record[this.recordSteep];
-//				this.$store.commit('saveRecovery',this.childMsg);
         this.$store.commit('saveRecord',this.childMsg);
         this.recordSteep += 1
 			}else{
 				this.childMsg=[];
 			}
-//			console.log('back')
-//			this.recoverySteep = 0;
 		},	
 //		恢复
     editorRecovery(){
@@ -382,11 +377,83 @@ export default {
 //	菜单栏
 		deleteElm(){//删除组件
 			var msg = this.$store.state.editorMenuMsg.elmMsg;
-			this.childMsg.splice(msg.index,1);
+			var index = msg.index;
+			for(var item of this.childMsg){
+				if(item.index == index){
+						var i = this.childMsg.indexOf(item)
+						this.childMsg.splice(i,1);
+				}
+			}
+			this.childMsg.forEach(function(item,index){
+				item.index = index;
+			})
+			var data = {
+				status:false
+			}
+			this.$store.commit('changeEditorMenu',data);
+		},
+		copyElm(){//复制组件
+			var newElm = {};
+			var msg = this.$store.state.editorMenuMsg.elmMsg;
+			var index = this.childMsg.length;
+			var oldTop = this.getMyWeb.transStyle(msg.props.msg.styles.top);
+			this.getMyWeb.objectSetVal(newElm,msg);
+			newElm.index = index;
+			newElm.props.msg.styles.top = oldTop + 40 + 'px';
+			this.childMsg.push(newElm);
 			var data = {
 				status:false
 			}
 			this.$store.commit('changeEditorMenu',data)
+		},
+		elmUp(){//组件向上移一层
+			var msg = this.$store.state.editorMenuMsg.elmMsg;
+					for(var item of this.childMsg){
+						if(item.index == msg.index){
+							var newIndex = item.props.msg.styles['z-index']*1 + 1
+							item.props.msg.styles['z-index'] = String(newIndex);
+						}
+					}
+					console.log(this.childMsg)
+					var data = {
+						status:false
+					}
+					this.$store.commit('changeEditorMenu',data)
+		},
+		elmDown(){//组件向下移一层
+			var msg = this.$store.state.editorMenuMsg.elmMsg;
+					for(var item of this.childMsg){
+						if(item.index == msg.index){
+							var newIndex = item.props.msg.styles['z-index']*1 - 1
+							item.props.msg.styles['z-index'] = String(newIndex);
+						}
+					}
+					console.log(this.childMsg)
+					var data = {
+						status:false
+					}
+					this.$store.commit('changeEditorMenu',data)
+		},
+		elmSetTop(){
+			var msg = this.$store.state.editorMenuMsg.elmMsg;
+			var bestIndex = 0;
+			for(var item of this.childMsg){
+				var num = item.props.msg.styles['z-index']*1;
+						if(num>bestIndex){
+							bestIndex = num;
+						}
+			}
+					for(var item of this.childMsg){
+						if(item.index == msg.index){
+							var newIndex = bestIndex + 1;
+							item.props.msg.styles['z-index'] = String(newIndex);
+						}
+					}
+					console.log(this.childMsg)
+					var data = {
+						status:false
+					}
+					this.$store.commit('changeEditorMenu',data)
 		},
 		pageLengthInput(e){
 			var val = e.target.value;
@@ -408,7 +475,7 @@ export default {
 				clearInterval(timer);
 			}
 		},
-		shorteningPage(){
+		shorteningPage(){//缩短页面
 			var elm = document.getElementById('editorScrollBox');
 			if(this.editorDefaultMsg.pageLength <= 667) return;
 			var timer = setInterval(()=>{
@@ -547,6 +614,7 @@ export default {
 		text-align: center;
 		border: 1px solid gainsboro;
 		border-radius:3px ;
+		z-index: 2000;
 	}
 	.editor-menu-botton{
 		height: 40px;
@@ -557,5 +625,19 @@ export default {
 	.editor-menu-botton:hover{
 		background: #2589FF;
 		color: white;
+	}
+/*	编辑器操作按钮*/
+  .editor-handle-btn{
+  	display: flex;
+  }
+  .editor-handle-btn:hover{
+  	color: #2196F3;
+  }
+ 	.editor-handle-btn-text{
+ 		padding-top: 2px;
+		font-size: 12px;
+		color: #B5B1B1;
+		padding-right:5px;
+		line-height: 14px; 
 	}
 </style>

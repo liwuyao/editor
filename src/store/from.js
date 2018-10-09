@@ -2,8 +2,6 @@ export default{
   state: {
   	elmMsg: {
   		srfrom:{
-  			htmlHead: "<srbutton :btnConfig='",
-  			htmlFoot: "'></srbutton>",
   			creatMsg:{
   							htmlHead: "<srbutton :btnConfig='",
   			        htmlFoot: "'></srbutton>",

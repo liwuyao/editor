@@ -2,8 +2,6 @@ export default{
   state: {
   	elmMsg: {
   		srbutton:{
-  			htmlHead: "<srbutton :btnConfig='",
-  			htmlFoot: "'></srbutton>",
   			creatMsg:{
   							htmlHead: "<srbutton :btnConfig='",
   			        htmlFoot: "'></srbutton>",
@@ -17,13 +15,14 @@ export default{
 				      				width:'70px',
 				      				height:'40px',
 				      				color:'#ccc',
-				      				background: '#409EFF',
+				      				background: 'rgba(255,255,255,0)',
 				      				left: '153px',
 				      				top: '',
 				      				'font-size':'14px',
 				      				'font-weight':'100',
 				      				'font-style': 'normal',
-				      				'border-color':'#000'
+				      				'border-color':'rgba(0,0,0,1)',
+				      				'z-index': '0',
 				      			},
 				      			content:{
 						      				name: '按钮',
@@ -31,9 +30,6 @@ export default{
 				      		},
 				      	},
 				      	input:[
-				      			{
-					      			name:'inputname',
-					      		},
 					      		{
 					      			name:'inputsize'
 					      		},
